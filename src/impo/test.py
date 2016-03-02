@@ -8,12 +8,13 @@ import networkx
 import ptnet
 import pes
 import sat
+import intervals
 
 from util import *
 from impo import *
 
 def generate_ex () :
-    n = ptnet.Net ()
+    n = ptnet.net.Net ()
 
     t1 = n.trans_add ("register")
     t2 = n.trans_add ("repeat")
@@ -128,7 +129,11 @@ def test3 () :
     print list (p.iter_maximal ())
 
 def test4 () :
-    pes.test1 ()
+    n = ptnet.net.Net (True)
+    f = open ('test.pnml', 'r')
+    n.read (f, 'pnml')
+    f = open ('test2.dot', 'w')
+    n.write (f, 'dot')
 
 def test5 () :
     u = ptnet.unfolding.Unfolding (True)
@@ -238,5 +243,83 @@ def test7 () :
     print 'edges', g.edges ()
     print 'maximal cliques', list (networkx.find_cliques (g))
     # [[1, 2], [6, 8, 7], [6, 3, 4], [6, 5]]
+
+def test8 () :
+    #i = intervals.FloatInterval ((0,4))
+    #i = intervals.FloatInterval ([0,4])
+    i = intervals.FloatInterval.from_string ('[3,4]')
+    #i = intervals.FloatInterval.open_closed (0,4)
+    print i
+    print i.lower
+    print i.upper
+    print i.lower_inc
+    print i.upper_inc
+
+    i.upper_inc = False
+    i.lower = 2
+    i.upper = float ('inf')
+    print i
+    print i.lower
+    print i.upper
+    print i.lower_inc
+    print i.upper_inc
+    print 3.999999999 in i
+    print 'inf in i', float ('inf') in i
+    print 'inf == upper', float ('inf') == i.upper
+
+    a = intervals.FloatInterval ([0.0, float ('inf')])
+    a.upper_inc = False
+    i.lower = 0
+    i.lower_inc = True
+    print 'all', a
+    print 'i', i
+    print 'all == i', a == i
+
+def test9 () :
+    n = ptnet.tpn.Net ()
+    p0 = n.place_add ('p0', 1)
+    p1 = n.place_add ('p1')
+
+    ival = intervals.FloatInterval ([0, float ('inf')])
+    t = n.trans_add ('t-[0,inf]', ival)
+    p0.post_add (t)
+    p1.pre_add (t)
+
+    ival = intervals.FloatInterval ([2, 4])
+    t = n.trans_add ('t-[2,4]', ival)
+    p0.post_add (t)
+    p1.pre_add (t)
+
+    ival = intervals.FloatInterval ([0, 7])
+    ival.lower_inc = False
+    t = n.trans_add ('t-(0,7]', ival)
+    p0.post_add (t)
+    p1.pre_add (t)
+
+    ival = intervals.FloatInterval ([1, 2])
+    ival.upper_inc = False
+    t = n.trans_add ('t-[1,2)', ival)
+    p0.post_add (t)
+    p1.pre_add (t)
+
+    ival = intervals.FloatInterval ((1, 2))
+    t = n.trans_add ('t-(1,2)', ival)
+    p0.post_add (t)
+    p1.pre_add (t)
+
+    ival = intervals.FloatInterval ([1, float('inf')])
+    t = n.trans_add ('t-[10,inf)', ival)
+    p0.post_add (t)
+    p1.pre_add (t)
+
+    n.write (sys.stdout, 'pnml')
+    n.write (sys.stdout, 'pt1')
+
+def test10 () :
+    n = ptnet.tpn.Net (True)
+    f = open ('test.pnml', 'r')
+    n.read (f, 'pnml')
+    f = open ('test2.dot', 'w')
+    n.write (f, 'dot')
 
 # vi:ts=4:sw=4:et:

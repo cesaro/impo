@@ -309,7 +309,7 @@ class Main :
 
     def main (self) :
 
-        test5 ()
+        test10 ()
         return
 
         self.parse_cmdline_args ()

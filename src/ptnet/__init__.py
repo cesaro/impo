@@ -1,6 +1,7 @@
 
-from net import *
-from unfolding import *
-from mp import *
+import net
+import unfolding
+import mp
+import tpn
 
 # vi:ts=4:sw=4:et:
