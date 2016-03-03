@@ -46,12 +46,15 @@ class Configuration :
         # returns ex(C)
         pass
 
-    def iter_cex (self) :
+    def cex (self) :
+        s = set ()
         # trivial algorithm
         for e in self.events :
             for ep in e.post :
+                if ep in self.events : continue
                 if ep.pre <= self.events and ep not in self.__en :
-                    yield ep
+                    s.add (ep)
+        return s
 
     def add (self, e) :
         if e not in self.__en :

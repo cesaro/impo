@@ -274,11 +274,15 @@ class Main :
         l = self.pes.iter_max_confs ()
         ll = []
         for c in l :
-            print 'impo: pes > conf: mx', list (c.maximal ())
+            print 'impo: pes > conf: new configuration'
+            print 'impo: pes > conf:   all', long_list (c.events)
+            print 'impo: pes > conf:   mx ', long_list (c.maximal ())
+            print 'impo: pes > conf:   cex', long_list (c.cex ())
             self.assert_is_max_conf (c)
 
+            const = ConfigConst (c, self.efd, self.lfd)
+            print const
             continue
-            const = ConfigConst (c)
             if not const.includes_v0 (v0const) : continue
             constt = const.hide ()
 
@@ -890,7 +894,7 @@ class Param :
     def __init__ (self, name) :
         self.name = name
     def __str__ (self) :
-        return str (name)
+        return str (self.name)
 
 class ParamTable :
     def __init__ (self) :
@@ -913,11 +917,13 @@ class Var (str) :
     pass
 
 class ConfigConst :
-    def __init__ (self, c) :
+    def __init__ (self, c, efd, lfd) :
         self.c = c          # the configuration
         self.const = ""      # the constraint
         self.__tab = {}     # map from objects to Vars (only for vars that are not params)
         self.hidevars = []  # range of the __tab map (seen as a function)
+        self.efd = efd
+        self.lfd = lfd
 
         self.__build ()
 
@@ -925,7 +931,7 @@ class ConfigConst :
         try :
             return self.__tab[obj]
         except KeyError :
-            if type (obj) == pes.Event :
+            if isinstance (obj, pes.Event) :
                 name = 'e%d' % obj.nr
             else :
                 name = str (obj)
@@ -944,34 +950,50 @@ class ConfigConst :
         return self.const
 
     def __build (self) :
+        self.const = 'and (\n'
+        self.__gen_delays_met ()
+        self.__gen_cex_not_overtaken ()
+        self.const += ')\n'
+
+    def __gen_delays_met (self) :
         # delays of all events in the configuration are met (first condition)
         for e in self.c :
             ve = self.getvar (e)
             vdoe = self.__gen_doe (e)
 
             # efd(e.label) <= e - doe_e
+            self.const += ' (* delays met for %s *)\n' % repr (e)
             self.const += " %s <= %s - %s,\n" % \
                     (str (self.efd[e.label]), str (ve), str (vdoe))
 
             # e - doe_e <= lfd(e.label)
-            self.const += " %s - %s <= %s,\n" % \
+            s = "%s - %s <= %s," % \
                     (str(ve), str (vdoe), str (self.lfd[e.label]))
+            if self.lfd[e.label] == float ('inf') : s = '(* %s *)' % s
+            self.const += ' ' + s + '\n\n'
 
-        # we profit from the fact that the configuration is maximal, to compute
-        # the conflicting extensions (and skip adding the third constraint ;)
+    def __gen_cex_not_overtaken (self) :
+        # latest firing delays of conflicting extensions of the configuration
+        # are not overtaken; we profit from the fact that the configuration is
+        # maximal, to compute the conflicting extensions (and skip adding the
+        # third constraint ;)
         assert len (self.c.enabled ()) == 0
-        for e in self.c.iter_cex () :
+        for e in self.c.cex () :
             vdod = self.__gen_dod (e)
             vdoe = self.__gen_doe (e)
 
             # dod_e <= doe_e + lfd(e.label)
-            self.const += " %s <= %s + %s,\n" % \
+            self.const += ' (* delay not overtaken for cex %s *)\n' % repr (e)
+            s = "%s <= %s + %s," % \
                     (str (vdod), str (vdoe), str (self.lfd[e.label]))
+            if self.lfd[e.label] == float ('inf') : s = '(* %s *)' % s
+            self.const += ' ' + s + '\n\n'
 
     def __gen_doe (self, e) :
-        self.const += " (* doe of %s *)\n" % repr (e)
+        self.const += " (* doe(%s) = max %s *)\n" % (repr (e), list (e.pre))
         v = self.getvar ('doe_e%d' % e.nr)
         self.__gen_max_const_eq ([self.getvar (ep) for ep in e.pre], v)
+        self.const += "\n"
         return v
 
     def __gen_dod (self, e) :
@@ -983,9 +1005,10 @@ class ConfigConst :
         # transformation of a branching process ;)
         l = [ep for ep in e.cfl if ep in self.c.events]
 
-        self.const += " (* dod of %s *)\n" % repr (e)
+        self.const += " (* dod(%s) = min %s *)\n" % (repr (e), l)
         v = self.getvar ('dod_e%d' % e.nr)
-        self.__gen_max_const_eq ([self.getvar (ep) for ep in l], v)
+        self.__gen_min_const_eq ([self.getvar (ep) for ep in l], v)
+        self.const += "\n"
         return v
 
 
@@ -1001,9 +1024,10 @@ class ConfigConst :
 
     def __gen_max_const_ge (self, l, m) :
         # max (all vars in l) >= m
+        if len (l) == 0 : return
         self.const += " ("
         for e in l[:-1] :
-            self.const += "%s >= %s or" % (str (e), str (m))
+            self.const += "%s >= %s or " % (str (e), str (m))
         self.const += "%s >= %s),\n" % (str (l[-1]), str (m))
 
     def __gen_min_const_eq (self, l, m) :
@@ -1013,9 +1037,10 @@ class ConfigConst :
 
     def __gen_min_const_le (self, l, m) :
         # min (all vars in l) <= m
+        if len (l) == 0 : return
         self.const += " ("
         for e in l[:-1] :
-            self.const += "%s >= %s or" % (str (m), str (e))
+            self.const += "%s >= %s or " % (str (m), str (e))
         self.const += "%s >= %s),\n" % (str (m), str (l[-1]))
 
     def __gen_min_const_ge (self, l, m) :
