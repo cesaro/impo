@@ -170,4 +170,9 @@ def long_list (ls, maxlen=5) :
         s += "]"
     return s
 
+def long_str (s, maxlen=160) :
+    if len (s) <= maxlen : return s
+    _, _, hum = size_human (len (s) - maxlen)
+    return s[:maxlen] + ' ... %s more' % hum
+
 # vi:ts=4:sw=4:et:

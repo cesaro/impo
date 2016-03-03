@@ -271,9 +271,18 @@ class Main :
         # extract maximal configurations
         self.pes.write (sys.stdout, 'dot')
         print 'impo: pes > conf: enumerating all maximal PES configurations'
-        l = self.pes.iter_max_confs ()
-        ll = []
-        for c in l :
+        mxconfs = self.pes.iter_max_confs ()
+
+        # IMPO method :
+        # for every maximal config:
+        # - generate string constraint with clocks and params
+        # - hide clock variables
+        # - discard if v0-compatible
+        # - negate and add to the final conjunction
+        # add k0 to the final conjunction
+
+        l = []
+        for c in mxconfs :
             print 'impo: con > eq: *** new configuration:'
             print 'impo: con > eq:   all', long_list (c.events)
             print 'impo: con > eq:   mx ', long_list (c.maximal ())
@@ -283,33 +292,25 @@ class Main :
             const = ConfigConst (c, self.efd, self.lfd, self.v0const)
             const.generate ()
 
-            print 'impo: con > eq: existential quantification of clock vars'
+            print 'impo: con > eq: existential quantification of clock/doe/dod vars'
             const2 = const.hide ()
 
             print 'impo: con > eq: checking whether v0 compatible'
             if const2.does_include_v0 () :
                 print 'impo: con > eq: v0-compatible, skipping'
-                continue
-            print 'xxxxxxxxxxxxxxxx'
-            print const.const
-            continue
+                #continue
 
-            print 'constt', constt
-            # negate and add to ll
+            print 'impo: con > eq: negating constraint'
+            const3 = const2.negate ()
+            l.append (const3)
+            print const3
 
-        # compute final conjunction
-        # add K0
+        # compute final conjunction, adding k0
+        self.compute_final_constraint (l)
 
 
-        # for every config
-        # - generate string constraint with clocks and params
-        # - check if it includes v0
-        # - hide clock variables and store
-        # negate and final conjunction
-
-        # transform (self, c) -> string conttraint with clocks and params
-        # polyop (str) > str
-        # compute k0
+    def compute_final_constraint (self, l) :
+        pass
 
     def setup_params_v0_k0 (self) :
         # formatting
@@ -998,8 +999,19 @@ class ConfigConst :
         query += ') in ' + self.const
 
         output = polyop (query, 'impo: con > eq:  ')
-        print 'impo: con > eq:   query:', repr (query)
-        print 'impo: con > eq:   result:', repr (output)
+        print 'impo: con > eq:   query:', long_str (repr (query))
+        print 'impo: con > eq:   result:', long_str (repr (output))
+
+        # build a new constraint and return it
+        c = ConfigConst (self.c, self.efd, self.lfd, self.v0const)
+        c.const = output
+        return c
+
+    def negate (self) :
+        query = 'simplify not (%s)' % self.const
+        output = polyop (query, 'impo: con > eq:  ')
+        print 'impo: con > eq:   query:', long_str (repr (query))
+        print 'impo: con > eq:   result:', long_str (repr (output))
 
         # build a new constraint and return it
         c = ConfigConst (self.c, self.efd, self.lfd, self.v0const)
