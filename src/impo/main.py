@@ -285,7 +285,6 @@ class Main :
             print 'constt', constt
             # negate and add to ll
 
-
         # compute final conjunction
         # add K0
 
