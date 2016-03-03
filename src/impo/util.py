@@ -12,6 +12,8 @@ def error_missing_package (exception) :
 
 try :
     import os
+    import subprocess
+    import tempfile
     import ptnet
 except ImportError, e:
     error_missing_package (e)
@@ -76,10 +78,8 @@ def load_bp (path, prefix='impo') :
         print "%s:  %s" % (prefix, str (e))
     return bp
 
-import subprocess
-
-def runit (args, timeout=-1, sh=False, prefix='impo') :
-    print '%s: cmd:' % prefix, args, 'timeout', timeout
+def runit (args, timeout=-1, sh=False, prefix='impo: ') :
+    print prefix, 'cmd:', args, 'timeout', timeout
     try :
         p = subprocess.Popen (args, bufsize=8192, stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
@@ -120,12 +120,11 @@ def runit (args, timeout=-1, sh=False, prefix='impo') :
         p.wait ()
         raise
 
-def polyop (query, prefix='impo') :
+def polyop (query, prefix='impo: ') :
     inpath = None
     outpath = None
     try :
         # save the query into temp file
-        print prefix, ': polyop: quering...'
         fd, inpath = tempfile.mkstemp (suffix='.polyop')
         f = os.fdopen (fd, 'w')
         f.write (query)
@@ -133,11 +132,11 @@ def polyop (query, prefix='impo') :
 
         # run polyop
         cmd = ['polyop', inpath]
-        exitcode, out = runit (cmd, prefix)
+        exitcode, out = runit (cmd, prefix=prefix)
         if exitcode != 0 :
             raise Exception, 'polyop: exit code %d, output: "%s"' % (exitcode, out)
-        print prefix, ': polyop query terminated correctly'
-        print prefix, ': poly stdout: "%s"' % out
+        print prefix, 'exit code 0'
+        #print prefix, 'poly stdout: "%s"' % out
 
         # load result
         outpath = inpath + '.res'

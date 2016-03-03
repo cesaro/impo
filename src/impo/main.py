@@ -96,6 +96,9 @@ class Main :
         self.efd = None                 # map from Transitions to either a Param or float
         self.lfd = None                 # map from Transitions to either a Param or float
 
+        self.k0const = None             # initial constraint on parameters (string)
+        self.v0const = None             # p1 = v0[p1], p2 = v0[p2], etc (string)
+
     def parse_cmdline_args (self) :
 
         self.arg_param_efd = {}
@@ -249,10 +252,10 @@ class Main :
 
         # load the net
         self.net = load_tpn (self.arg_pnmlfile, "pnml", "impo")
-        print 'impo: note: delay interval closure info (open, close) will be completely ignored'
+        print 'impo: note: delay interval closure info (open, close) will be completely ignored!'
 
-        # setup v0, lower and upper bounds (efd, lfd)
-        self.setup_params_and_v0 ()
+        # setup v0, lower and upper bounds (efd, lfd), and k0
+        self.setup_params_v0_k0 ()
 
         # unfold with cunf
         self.export_and_unfold ()
@@ -265,26 +268,31 @@ class Main :
         # relabel the PES so event labels point to self.net
         self.relabel_pes ()
 
-        # build constraint associated to v0
-        v0const = self.generate_v0const ()
-
         # extract maximal configurations
         self.pes.write (sys.stdout, 'dot')
         print 'impo: pes > conf: enumerating all maximal PES configurations'
         l = self.pes.iter_max_confs ()
         ll = []
         for c in l :
-            print 'impo: pes > conf: new configuration'
-            print 'impo: pes > conf:   all', long_list (c.events)
-            print 'impo: pes > conf:   mx ', long_list (c.maximal ())
-            print 'impo: pes > conf:   cex', long_list (c.cex ())
+            print 'impo: con > eq: *** new configuration:'
+            print 'impo: con > eq:   all', long_list (c.events)
+            print 'impo: con > eq:   mx ', long_list (c.maximal ())
+            print 'impo: con > eq:   cex', long_list (c.cex ())
             self.assert_is_max_conf (c)
 
-            const = ConfigConst (c, self.efd, self.lfd)
-            print const
+            const = ConfigConst (c, self.efd, self.lfd, self.v0const)
+            const.generate ()
+
+            print 'impo: con > eq: existential quantification of clock vars'
+            const2 = const.hide ()
+
+            print 'impo: con > eq: checking whether v0 compatible'
+            if const2.does_include_v0 () :
+                print 'impo: con > eq: v0-compatible, skipping'
+                continue
+            print 'xxxxxxxxxxxxxxxx'
+            print const.const
             continue
-            if not const.includes_v0 (v0const) : continue
-            constt = const.hide ()
 
             print 'constt', constt
             # negate and add to ll
@@ -303,10 +311,7 @@ class Main :
         # polyop (str) > str
         # compute k0
 
-    def generate_v0const (self) :
-        pass
-
-    def setup_params_and_v0 (self) :
+    def setup_params_v0_k0 (self) :
         # formatting
         pl1 = pl = 0
         if len (self.arg_param_efd) >= 1 :
@@ -345,7 +350,7 @@ class Main :
         # define the reference valuation, either coming from command line or
         # from the net
         self.v0 = {}
-        print 'impo: setting up reference valuation:'
+        print 'impo: setting up reference valuation v0:'
         for p in self.paramtab :
             if p.name in self.arg_v0 :
                 self.v0[p] = self.arg_v0[p.name]
@@ -363,6 +368,39 @@ class Main :
             print "impo: WARNING: transition '%s' not found, but you gave a parameter for its lfd" % name
         for name in self.arg_v0 :
             print "impo: WARNING: parameter '%s' not defined, but you gave its reference value" % name
+
+        # set up an initial constraint, stating than delay intervals are really
+        # so
+        print 'impo: setting up initial constraint k0'
+        self.k0const = 'and (\n'
+        for t in self.net.trans :
+            if isinstance (self.efd[t], Param) or isinstance (self.lfd[t], Param) :
+                self.k0const += ' %s <= %s, (* transition %s *)\n' % \
+                        (str (self.efd[t]), str (self.lfd[t]), t.name)
+        self.k0const = ')\n'
+
+        # build v0const
+        self.v0const = 'and (\n'
+        for p,v in self.v0.items () :
+            self.v0const += ' %s = %s,\n' % (str (p), v)
+        self.v0const += ')\n'
+
+        # check that v0const implies k0const
+        print 'impo: checking that v0 implies k0'
+        for t in self.net.trans :
+            if isinstance (self.efd[t], Param) :
+                low = self.v0[self.efd[t]]
+            else :
+                low = self.efd[t]
+            if isinstance (self.lfd[t], Param) :
+                high = self.v0[self.lfd[t]]
+            else :
+                high = self.lfd[t]
+            if low > high :
+                s = "error: v0 does not imply k0: "
+                s += "transition '%s': `%s <= %s' does not hold" % \
+                        (t.name, self.efd[t], self.lfd[t])
+                raise Exception, s
 
     def relabel_pes (self) :
         for e in self.pes.events :
@@ -406,11 +444,11 @@ class Main :
             cmd.append ('--stats')
             cmd.append ('--cutoff=none')
             cmd.append ('--max-events=5')
-            exitcode, out = runit (cmd, prefix='impo: net > unf')
+            exitcode, out = runit (cmd, prefix='impo: net > unf: ')
             if exitcode != 0 :
                 raise Exception, 'cunf unfolder: exit code %d, output: "%s"' % (exitcode, out)
-            print 'impo: net > unf: unfolder terminated correctly'
-            print 'impo: net > unf: cunf stdout: "%s"' % out
+            print 'impo: net > unf: exit code 0'
+            #print 'impo: net > unf: cunf stdout:', repr (out)
 
             # load unfolding
             self.bp = load_bp (cufpath, 'impo: net > cuf')
@@ -917,15 +955,14 @@ class Var (str) :
     pass
 
 class ConfigConst :
-    def __init__ (self, c, efd, lfd) :
+    def __init__ (self, c, efd, lfd, v0const) :
         self.c = c          # the configuration
         self.const = ""      # the constraint
         self.__tab = {}     # map from objects to Vars (only for vars that are not params)
         self.hidevars = []  # range of the __tab map (seen as a function)
         self.efd = efd
         self.lfd = lfd
-
-        self.__build ()
+        self.v0const = v0const
 
     def getvar (self, obj) :
         try :
@@ -940,16 +977,39 @@ class ConfigConst :
             self.hidevars.append (v)
             return v
 
-    def includes_v0 (self, v0const):
-        pass
+    def does_include_v0 (self) :
+        # polyop gives correct result only if we have no variables to hide (ask Etienne)
+        if len (self.hidevars) :
+            raise Exception, 'Internal error: v0 inclusion checking bug'
+        query = 'included %s in %s' % (self.v0const, self.const)
+
+        output = polyop (query, 'impo: con > eq:  ')
+        print 'impo: con > eq:   query:', repr (query)
+        print 'impo: con > eq:   result:', repr (output)
+        return output == 'yes'
 
     def hide (self) :
-        return self
+        # nothing to do if we already hid the clock variables
+        if len (self.hidevars) == 0 : return self
+
+        # hide variables with polyop
+        query = 'hide ('
+        query += ', '.join (str (v) for v in self.hidevars)
+        query += ') in ' + self.const
+
+        output = polyop (query, 'impo: con > eq:  ')
+        print 'impo: con > eq:   query:', repr (query)
+        print 'impo: con > eq:   result:', repr (output)
+
+        # build a new constraint and return it
+        c = ConfigConst (self.c, self.efd, self.lfd, self.v0const)
+        c.const = output
+        return c
 
     def __str__ (self) :
         return self.const
 
-    def __build (self) :
+    def generate (self) :
         self.const = 'and (\n'
         self.__gen_delays_met ()
         self.__gen_cex_not_overtaken ()
