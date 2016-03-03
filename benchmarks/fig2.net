@@ -1,0 +1,10 @@
+# Fig. 2 in our paper
+
+net fig2
+tr a [0,w[ p1    -> p3
+tr b [0,5] p3 p4 -> p1 p2
+tr c [3,4] p2    -> p4
+tr d [2,4] p3    -> p1
+pl p1 (1)
+pl p2 (1)
+

@@ -129,6 +129,14 @@ YACC:=bison
 	@echo "P2P $<"
 	@src/pnml2pep.py < $< > $@
 
+%.pnml : %.net
+	@echo "NDR $<"
+	@ndrio $< $@
+
+%.pnml : %.ndr
+	@echo "NDR $<"
+	@ndrio $< $@
+
 %.ll_net : %.grml
 	@echo "G2P $<"
 	@tools/grml2pep.py < $< > $@
