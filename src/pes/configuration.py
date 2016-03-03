@@ -46,6 +46,13 @@ class Configuration :
         # returns ex(C)
         pass
 
+    def iter_cex (self) :
+        # trivial algorithm
+        for e in self.events :
+            for ep in e.post :
+                if ep.pre <= self.events and ep not in self.__en :
+                    yield ep
+
     def add (self, e) :
         if e not in self.__en :
             raise ValueError, "Event %s is not enabled cand cannot be added" % repr (e)

@@ -322,4 +322,20 @@ def test10 () :
     f = open ('test2.dot', 'w')
     n.write (f, 'dot')
 
+def test11 () :
+    print size_human (100)
+    print size_human (1000)
+    print size_human (2000)
+    print size_human (3000)
+    print size_human (4000)
+    print size_human (8000)
+    print size_human (10 * 1024 + 600)
+    print size_human (1023 * 1024 + 600)
+    print size_human (1024 * 1024 * 2.5)
+    print size_human (1024 * 1024 * 600)
+    print size_human (1024 * 1024 * 1026)
+    print size_human (1024 * 1024 * 8026)
+    print size_human (1024 * 1024 * 8026 * 1024)
+
+
 # vi:ts=4:sw=4:et:

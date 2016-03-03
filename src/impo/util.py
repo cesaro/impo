@@ -120,6 +120,36 @@ def runit (args, timeout=-1, sh=False, prefix='impo') :
         p.wait ()
         raise
 
+def polyop (query, prefix='impo') :
+    inpath = None
+    outpath = None
+    try :
+        # save the query into temp file
+        print prefix, ': polyop: quering...'
+        fd, inpath = tempfile.mkstemp (suffix='.polyop')
+        f = os.fdopen (fd, 'w')
+        f.write (query)
+        f.close ()
+
+        # run polyop
+        cmd = ['polyop', inpath]
+        exitcode, out = runit (cmd, prefix)
+        if exitcode != 0 :
+            raise Exception, 'polyop: exit code %d, output: "%s"' % (exitcode, out)
+        print prefix, ': polyop query terminated correctly'
+        print prefix, ': poly stdout: "%s"' % out
+
+        # load result
+        outpath = inpath + '.res'
+        with open (outpath) as f : res = f.read ()
+
+    finally :
+        # remove temporary files
+        if inpath != None : os.unlink (inpath)
+        if outpath != None : os.unlink (outpath)
+
+    # strip and return
+    return res.strip (' \t\n')
 
 def avg_iter (it) :
     s = 0

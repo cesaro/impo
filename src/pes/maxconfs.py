@@ -1,7 +1,7 @@
 
 from configuration import *
 
-def enum_max_conf (pes, c, d, a, enum) :
+def enum_max_conf (pes, c, d, a, enum, want=0) :
 
     # implementation of the CONCUR'15 algorithm on a fully constructed PES
 
@@ -13,13 +13,16 @@ def enum_max_conf (pes, c, d, a, enum) :
     # - all events in d are enabled at c (none is in cex(c))
 
     print 'emc:', 'x' * 50
-    print 'emc: call: c %s d %s a %s' % (c.events, d, a)
+    print 'emc: call: c %s d %s a %s want %d' % (c.events, d, a, want)
 
     # if maximal configuration, backtrack
     en = c.enabled ()
     if len (en) == 0 :
         print 'emc: MAX:', c
-        enum.append (list (c.maximal ()))
+        if want == 0 :
+            enum.append (list (c.maximal ()))
+        elif want == 1 :
+            enum.append (c)
         return
 
     # pick an enabled event, possibly marked by a
@@ -40,7 +43,7 @@ def enum_max_conf (pes, c, d, a, enum) :
     cc = c.clone ()
     cc.add (e)
     dd = __enum_max_conf_clean_d (pes, cc, d, e)
-    enum_max_conf (pes, cc, dd, a, enum)
+    enum_max_conf (pes, cc, dd, a, enum, want)
 
     # compute the alternatives, labelling J by the mark a (if != -1)
     d.append (e)
@@ -49,7 +52,7 @@ def enum_max_conf (pes, c, d, a, enum) :
     # right subtree
     if a != -1 :
         print 'emc: found alternative, exploring right subtree'
-        enum_max_conf (pes, c, d, a, enum)
+        enum_max_conf (pes, c, d, a, enum, want)
     else :
         print 'emc: found no alternative, returning'
 

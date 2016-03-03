@@ -271,10 +271,16 @@ class PES :
             self.__cfl_rel[k] = False
             return False
 
+    def iter_max_confs_mx (self) :
+        c = Configuration (self)
+        l = []
+        enum_max_conf (self, c, [], -1, l, want=0)
+        return l
+
     def iter_max_confs (self) :
         c = Configuration (self)
         l = []
-        enum_max_conf (self, c, [], -1, l)
+        enum_max_conf (self, c, [], -1, l, want=1)
         return l
 
     def __repr__ (self) :

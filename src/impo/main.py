@@ -244,28 +244,16 @@ class Main :
 
     def main (self) :
 
-        #print size_human (100)
-        #print size_human (1000)
-        #print size_human (2000)
-        #print size_human (3000)
-        #print size_human (4000)
-        #print size_human (8000)
-        #print size_human (10 * 1024 + 600)
-        #print size_human (1023 * 1024 + 600)
-        #print size_human (1024 * 1024 * 2.5)
-        #print size_human (1024 * 1024 * 600)
-        #print size_human (1024 * 1024 * 1026)
-        #print size_human (1024 * 1024 * 8026)
-        #print size_human (1024 * 1024 * 8026 * 1024)
-        #return
-
-
+        # parse command line
         self.parse_cmdline_args ()
 
         # load the net
         self.net = load_tpn (self.arg_pnmlfile, "pnml", "impo")
         print 'impo: note: delay interval closure info (open, close) will be completely ignored'
-        
+
+        # setup v0, lower and upper bounds (efd, lfd)
+        self.setup_params_and_v0 ()
+
         # unfold with cunf
         self.export_and_unfold ()
 
@@ -274,55 +262,160 @@ class Main :
         self.pes = pes.bp_to_pes (self.bp)
         print 'impo: unf > pes: done'
 
-        # extract maximal configurations
-        print 'impo: pes > conf: enumerating all maximal PES configurations'
-        #l = self.pes.iter_max_confs ()
-        #for mx in l :
-        #    print 'max conf:', mx
-        self.assert_max_confs ()
+        # relabel the PES so event labels point to self.net
+        self.relabel_pes ()
 
-    def assert_max_confs (self) :
+        # build constraint associated to v0
+        v0const = self.generate_v0const ()
+
+        # extract maximal configurations
+        self.pes.write (sys.stdout, 'dot')
+        print 'impo: pes > conf: enumerating all maximal PES configurations'
         l = self.pes.iter_max_confs ()
-        for mx in l :
-            print 'max conf:', mx
-        print 'running assertions ............'
-        for mx in l :
-            # verify that every two maximal events of a config are not in conflict
-            for e in mx :
-                for ee in mx :
-                    assert not self.pes.in_cfl (e, ee)
-            # so causal closure is indeed a configuration, maximal?
-            c = self.pes.get_local_config (mx)
-            assert len (c.enabled ()) == 0
-        print 'done, all claimed maximal configurations are indeed so'
+        ll = []
+        for c in l :
+            print 'impo: pes > conf: mx', list (c.maximal ())
+            self.assert_is_max_conf (c)
+
+            continue
+            const = ConfigConst (c)
+            if not const.includes_v0 (v0const) : continue
+            constt = const.hide ()
+
+            print 'constt', constt
+            # negate and add to ll
+
+
+        # compute final conjunction
+        # add K0
+
+
+        # for every config
+        # - generate string constraint with clocks and params
+        # - check if it includes v0
+        # - hide clock variables and store
+        # negate and final conjunction
+
+        # transform (self, c) -> string conttraint with clocks and params
+        # polyop (str) > str
+        # compute k0
+
+    def generate_v0const (self) :
+        pass
+
+    def setup_params_and_v0 (self) :
+        # formatting
+        pl1 = pl = 0
+        if len (self.arg_param_efd) >= 1 :
+            pl1 = max (len (s) for s in self.arg_param_efd.values ())
+        if len (self.arg_param_lfd) >= 1 :
+            pl  = max (len (s) for s in self.arg_param_lfd.values ())
+        if pl1 > pl : pl = pl1
+        tl = 0
+        if len (self.net.trans) :
+            tl = max (len (t.name) for t in self.net.trans)
+
+        # set up lower and upper bounds, parametric or non-parametric
+        netvalue = {}
+        self.efd = {}
+        self.lfd = {}
+        self.paramtab = ParamTable ()
+        print 'impo: setting up parametrized delays:'
+        for t in self.net.trans :
+            if t.name in self.arg_param_efd :
+                p = self.paramtab.get (self.arg_param_efd[t.name])
+                del self.arg_param_efd[t.name]
+                self.efd[t] = p
+                netvalue[p] = t.delay.lower
+                print "impo:   %-*s  (transition %.*s, lower)" % (pl, p.name, tl, t.name)
+            else :
+                self.efd[t] = t.delay.lower
+            if t.name in self.arg_param_lfd :
+                p = self.paramtab.get (self.arg_param_lfd[t.name])
+                del self.arg_param_lfd[t.name]
+                self.lfd[t] = p
+                netvalue[p] = t.delay.upper
+                print "impo:   %-*s  (transition %.*s, upper)" % (pl, p.name, tl, t.name)
+            else :
+                self.lfd[t] = t.delay.upper
+
+        # define the reference valuation, either coming from command line or
+        # from the net
+        self.v0 = {}
+        print 'impo: setting up reference valuation:'
+        for p in self.paramtab :
+            if p.name in self.arg_v0 :
+                self.v0[p] = self.arg_v0[p.name]
+                del self.arg_v0[p.name]
+                print "impo:   %.*s  %-10f (from cmdline)" % (pl, p.name, self.v0[p])
+            else :
+                self.v0[p] = netvalue[p]
+                print "impo:   %.*s  %-10f (from tpn)" % (pl, p.name, self.v0[p])
+
+        # we removed used pairs from the argument mappings, if we still have
+        # somthing, warning
+        for name in self.arg_param_efd :
+            print "impo: WARNING: transition '%s' not found, but you gave a parameter for its efd" % name
+        for name in self.arg_param_lfd :
+            print "impo: WARNING: transition '%s' not found, but you gave a parameter for its lfd" % name
+        for name in self.arg_v0 :
+            print "impo: WARNING: parameter '%s' not defined, but you gave its reference value" % name
+
+    def relabel_pes (self) :
+        for e in self.pes.events :
+            t = self.net.trans_lookup_name (e.label.name)
+            if t == None :
+                raise Exception, \
+                        'Internal error: cannot map event "%s" in PES to transition' % repr (e)
+            e.label = t
+
+    def assert_is_max_conf (self, c) :
+        assert len (c.enabled ()) == 0
+
+    def assert_is_max_conf_mx (self, mx) :
+        print 'impo: pes > conf: asserting is maximal configuration'
+        # verify that every two maximal events of a config are not in conflict
+        for e in mx :
+            for ee in mx :
+                assert not self.pes.in_cfl (e, ee)
+        # so causal closure is indeed a configuration, maximal?
+        c = self.pes.get_local_config (mx)
+        assert len (c.enabled ()) == 0
+        print 'impo: pes > conf: done, it is max conf'
 
     def export_and_unfold (self) :
+        netpath = None
+        cufpath = None
+        try :
+            # export in ll_net into temporary file
+            print 'impo: net > unf: exporting net in ll_net format'
+            fnet, netpath = tempfile.mkstemp (suffix='.ll_net')
+            fcuf, cufpath = tempfile.mkstemp (suffix='.cuf')
+            os.close (fcuf)
+            f = os.fdopen (fnet, 'w')
+            self.net.write (f, 'pep')
+            f.close ()
+            print 'impo: net > unf: done'
 
-        # export in ll_net into temporary file
-        print 'impo: net > unf: exporting net in ll_net format'
-        fnet, netpath = tempfile.mkstemp (suffix='.ll_net')
-        fcuf, cufpath = tempfile.mkstemp (suffix='.cuf')
-        os.close (fcuf)
-        f = os.fdopen (fnet, 'w')
-        self.net.write (f, 'pep')
-        f.close ()
-        print 'impo: net > unf: done'
+            # call cunf
+            cmd = ['cunf', netpath]
+            cmd.append ('--save=%s' % cufpath)
+            cmd.append ('--stats')
+            cmd.append ('--cutoff=none')
+            cmd.append ('--max-events=5')
+            exitcode, out = runit (cmd, prefix='impo: net > unf')
+            if exitcode != 0 :
+                raise Exception, 'cunf unfolder: exit code %d, output: "%s"' % (exitcode, out)
+            print 'impo: net > unf: unfolder terminated correctly'
+            print 'impo: net > unf: cunf stdout: "%s"' % out
 
-        # call cunf
-        cmd = ['cunf', netpath]
-        cmd.append ('--save=%s' % cufpath)
-        cmd.append ('--stats')
-        cmd.append ('--cutoff=none')
-        cmd.append ('--max-events=100')
-        exitcode, out = runit (cmd, prefix='impo: net > unf')
-        if exitcode != 0 :
-            raise Exception, 'cunf unfolder: exit code %d, output: "%s"' % (exitcode, out)
-        print 'impo: net > unf: unfolder terminated correctly'
-        print 'impo: net > unf: cunf stdout: "%s"' % out
+            # load unfolding
+            self.bp = load_bp (cufpath, 'impo: net > cuf')
 
-        # load unfolding
-        self.bp = load_bp (cufpath, 'impo: net > cuf')
-
+        finally :
+            # remove temporary files
+            if netpath != None : os.unlink (netpath)
+            if cufpath != None : os.unlink (cufpath)
 
     def load_coe_pairs (self, path) :
         try :
@@ -794,8 +887,11 @@ class Main :
         else :
             bp_to_net_assert_sp (self.bp, self.meq, e2t, c2p)
 
-class Param (str) :
-    pass
+class Param :
+    def __init__ (self, name) :
+        self.name = name
+    def __str__ (self) :
+        return str (name)
 
 class ParamTable :
     def __init__ (self) :
@@ -809,7 +905,123 @@ class ParamTable :
             return p
     def __getitem__ (self, name) :
         return self.get (name)
+    def __iter__ (self) :
+        return iter (self.__tab.values ())
     def __str__ (self) :
         return str (self.__tab)
+
+class Var (str) :
+    pass
+
+class ConfigConst :
+    def __init__ (self, c) :
+        self.c = c          # the configuration
+        self.const = ""      # the constraint
+        self.__tab = {}     # map from objects to Vars (only for vars that are not params)
+        self.hidevars = []  # range of the __tab map (seen as a function)
+
+        self.__build ()
+
+    def getvar (self, obj) :
+        try :
+            return self.__tab[obj]
+        except KeyError :
+            if type (obj) == pes.Event :
+                name = 'e%d' % obj.nr
+            else :
+                name = str (obj)
+            v = Var (name)
+            self.__tab[obj] = v
+            self.hidevars.append (v)
+            return v
+
+    def includes_v0 (self, v0const):
+        pass
+
+    def hide (self) :
+        return self
+
+    def __str__ (self) :
+        return self.const
+
+    def __build (self) :
+        # delays of all events in the configuration are met (first condition)
+        for e in self.c :
+            ve = self.getvar (e)
+            vdoe = self.__gen_doe (e)
+
+            # efd(e.label) <= e - doe_e
+            self.const += " %s <= %s - %s,\n" % \
+                    (str (self.efd[e.label]), str (ve), str (vdoe))
+
+            # e - doe_e <= lfd(e.label)
+            self.const += " %s - %s <= %s,\n" % \
+                    (str(ve), str (vdoe), str (self.lfd[e.label]))
+
+        # we profit from the fact that the configuration is maximal, to compute
+        # the conflicting extensions (and skip adding the third constraint ;)
+        assert len (self.c.enabled ()) == 0
+        for e in self.c.iter_cex () :
+            vdod = self.__gen_dod (e)
+            vdoe = self.__gen_doe (e)
+
+            # dod_e <= doe_e + lfd(e.label)
+            self.const += " %s <= %s + %s,\n" % \
+                    (str (vdod), str (vdoe), str (self.lfd[e.label]))
+
+    def __gen_doe (self, e) :
+        self.const += " (* doe of %s *)\n" % repr (e)
+        v = self.getvar ('doe_e%d' % e.nr)
+        self.__gen_max_const_eq ([self.getvar (ep) for ep in e.pre], v)
+        return v
+
+    def __gen_dod (self, e) :
+
+        # we need to find those events in the self.c that are in immediate
+        # conflict with e (the reasons why e is a conflicting extension ;)
+        # we relay here on the fact that e.cfl contains ONLY the immediate
+        # conflicts, due to the the fact that we constructed the PES by direct
+        # transformation of a branching process ;)
+        l = [ep for ep in e.cfl if ep in self.c.events]
+
+        self.const += " (* dod of %s *)\n" % repr (e)
+        v = self.getvar ('dod_e%d' % e.nr)
+        self.__gen_max_const_eq ([self.getvar (ep) for ep in l], v)
+        return v
+
+
+    def __gen_max_const_eq (self, l, m) :
+        # max (all vars in l) == m
+        self.__gen_max_const_le (l, m)
+        self.__gen_max_const_ge (l, m)
+
+    def __gen_max_const_le (self, l, m) :
+        # max (all vars in l) <= m
+        for e in l :
+            self.const += " %s <= %s,\n" % (str (e), str (m))
+
+    def __gen_max_const_ge (self, l, m) :
+        # max (all vars in l) >= m
+        self.const += " ("
+        for e in l[:-1] :
+            self.const += "%s >= %s or" % (str (e), str (m))
+        self.const += "%s >= %s),\n" % (str (l[-1]), str (m))
+
+    def __gen_min_const_eq (self, l, m) :
+        # min (all vars in l) == m
+        self.__gen_min_const_le (l, m)
+        self.__gen_min_const_ge (l, m)
+
+    def __gen_min_const_le (self, l, m) :
+        # min (all vars in l) <= m
+        self.const += " ("
+        for e in l[:-1] :
+            self.const += "%s >= %s or" % (str (m), str (e))
+        self.const += "%s >= %s),\n" % (str (m), str (l[-1]))
+
+    def __gen_min_const_ge (self, l, m) :
+        # min (all vars in l) >= m
+        for e in l :
+            self.const += " %s <= %s,\n" % (str (m), str (e))
 
 # vi:ts=4:sw=4:et:
