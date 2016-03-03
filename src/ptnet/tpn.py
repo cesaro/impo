@@ -16,7 +16,7 @@ class Transition (net.Transition) :
             raise Exception, 'Invalid interval: %s: lower bound is infinite' % str (delay)
         self.delay = delay
 
-        print "Transition: new: name %s dly %s" % (name, delay)
+        #print "Transition: new: name %s dly %s" % (name, delay)
 
     def __str__ (self) :
         s = net.Transition.__str__ (self)
@@ -217,7 +217,7 @@ class Net (net.Net) :
                 if k in self.__pnmlitm :
                     self.__pnmlitm[k] = self.__pnmlitm[k].strip(' \n\t')
             self.__pnmlq.append (self.__pnmlitm)
-            print '-- recoding', self.__pnmlitm
+            #print '-- recoding', self.__pnmlitm
             self.__pnmlitm = {}
             self.__pnmlitm['type'] = tag
             self.__pnmlitm['id'] = attr['id']

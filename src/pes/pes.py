@@ -11,7 +11,7 @@ def bp_to_pes (bp) :
 
     # first pass, map all events
     for e in bp.events :
-        print 'e', e
+        #print 'e', e
         bp2pes[e] = p.add_event (e.label, [], [])
 
     # second panss, set causality and conflicts

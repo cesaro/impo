@@ -1,118 +1,44 @@
 """
 Usage:
 
-pod [OPTIONS] net-stats            PNMLFILE
-pod [OPTIONS] extract-dependence   PNMLFILE
-pod [OPTIONS] compare-independence PNMLFILE PNMLFILE
-pod [OPTIONS] extract-log          PNMLFILE
-pod [OPTIONS] dump-log             LOGFILE
-pod [OPTIONS] dump-pes             LOGFILE DEPENFILE
-pod [OPTIONS] discover             LOGFILE DEPENFILE
+impo [OPTIONS] PNMLFILE
 
-
-NOTE: not yet implemented:
-pod [OPTIONS] dump-bp              LOGFILE DEPENFILE
-pod [OPTIONS] dump-encoding        LOGFILE DEPENFILE
-pod [OPTIONS] dump-merge           LOGFILE DEPENFILE
-
-The OPTIONS placeholder corresponds to zero or more of the following options:
+where PNMLFILE is the path to a file storing a Time Petri Net in Tina's PNML
+format.
+The delay intervals associated to each transition in PNMLFILE will become the
+reference valuation (unless redefined with the options --v0-*, see below).  The
+OPTIONS placeholder corresponds to zero or more of the following options:
 
  --help, -h
    Shows this message.
 
- --log-truncate=N
-   Uses only the first N sequences of the log to perform the synthesis. This
-   can be very useful for understanding the transformation performed by the
-   tool.  When in 'extract-log' mode, N is the number of sequences to generate.
+ --par-transition=T,X,Y
+   Parametrizes transition T, setting parameter X as the earliest firing delay,
+   and Y as the latest firing delay. The option can naturally appear multiples
+   times.
 
- --log-fraction-truncate=N
-   If the log has x sequences, it uses only the first x*(N/100) sequences of it.
-   Option incompatible with --log-truncate
+ --v0-par=X,N
+   Sets the reference valuation for parameter X to N.
 
- --log-only=N1,N2,...
-   Uses only sequences N1, N2, ... of the log to perform the synthesis. The
-   argument is a comma-separated list of integers indicating the position in
-   the log of the sequences that will be used (first sequence is index 0).
-   (NOTE: not yet implemented)
+ --v0-transition=T,N1,N2
+   Sets the reference valuation for the earliest/latest firing delay parameters
+   of transition T to, respectively, N1 and N2.
 
- --log-exclude=N1,N2
-   Use all sequences in LOGFILE except those whose index is N1, N2, ...
-   (NOTE: not yet implemented)
+ --par-transition=T
+   (Not yet implemented)
 
- --log-negative=LOGFILE
-   Provides a negative log to the tool.
+ --par-all-transitions
+   (Not yet implemented)
 
- --smt-timeout=N
-   When using z3, abort SMT solving after N seconds.
+ --k0
+   (Not yet implemented)
 
  --no-asserts
    Disables defensive programming verifications.
 
  --output=OUTPUTPATH
    Save the output of the command to OUTPUTPATH
-
- --log-unique
-   Prior to any usage (or truncation) of the log, it discards duplicate log
-   sequences.
-
- --eq=ID
-   Instructs the tool to use the folding equivalence identified by ID. The
-   following are available:
-
-   * id
-     The identity relation
-
-   * sp-1place
-     Merges all events with same label into 1 single transition.
-     Merges all conditions into 1 single place.
-     Ignores negative information.
-
-   * sp-pre-singleton
-     Merges all events with same label into 1 single transition.
-     Merges the presets of all events with the same label into 1 single place.
-     Ignores negative information.
-
-   * sp-pre-max
-     Merges all events with same label into 1 single transition.
-     Merges the presets of all events with the same label trying to get the
-     largest set of equivalence classes possible, ie, trying to merge as less
-     as possible.
-     Ignores negative information.
-
-   * sp-smt
-     Merges all events with same label into 1 single transition.
-     Ignores negative information.
-     If it merges two events, it also merges the preset of one with the preset
-     of the other. Accepts many options:
-     --smt-min-places   : minimum number of places on the final net
-     --smt-max-places   : maximum number of places on the final net
-     --smt-nr-places    : sets the above two options to the same value
-     --smt-pre-distinct : require transition presets to be as large as possible
-     --smt-forbid-self  : forbids the presence of self loops
-
-   * sp-smt-post
-     Like 'sp-smt' but additionally merging event postsets.
-     That is, if two events are merged, then the postset of one is merged with
-     the postset of the other.
-     Accepts the same options than 'sp-smt', except for --smt-max-places.
-
-   * ip-smt
-     Merges all events with same label into 1 single transition.
-     Ignores negative information.
-     If it merges two events, it also merges the preset of one with the preset
-     of the other, and similarly for their postsets.
-     Accepts options:
-     --smt-min-places   : minimum number of places on the final net
-     --smt-pre-distinct : require transition presets to be as large as possible
-     --smt-forbid-self  : forbids the presence of self loops
-
-     Like 'sp-smt-post', it is incompatible with options --smt-{max,nr}-places.
-
-   * ev-only
-     Merges all events with same label into 1 single transition.
-     Merges no condition at all.
-     Ignores negative information.
-     Mainly for debuging purposes.
+   (Not yet implemented)
 """
 
 try :
@@ -124,6 +50,8 @@ try :
     import networkx
     import argparse
     import random
+    import tempfile
+    import intervals
 
     import ptnet
     import pes
@@ -153,33 +81,40 @@ class MyArgumentParser (argparse.ArgumentParser) :
 class Main :
     def __init__ (self) :
 
-        # FIXME - review this
-        self.arg_command = ""
-        self.arg_log_path = ""
-        self.arg_depen_path = ""
+        self.arg_pnmlfile = None        # string
+        self.arg_param_efd = None       # map from transition names to param names
+        self.arg_param_lfd = None       # map from transition names to param names
+        self.arg_v0 = None              # map from parameter names to floats
 
-        self.arg_log_trunc = None     # integer
-        self.arg_log_only = None      # list
-        self.arg_log_exclude = None   # list
-        self.arg_log_negative = None  # path string
+        self.net = None                 # the net object
+        self.bp = None                  # the unfolding of the net 
+        self.pes = None                 # the PES associated to the unfolding
+        self.configs = None             # list of lists of maximal events
 
-        self.arg_output_path = ""
-        self.arg_eq = "id"
-        self.arg_no_asserts = False
-        self.arg_smt_timeout = 60
-        self.arg_smt_min_places = None
-        self.arg_smt_max_places = None
-        self.arg_smt_pre_distinct = False
-        #self.arg_smt_merge_post = False
-        self.arg_smt_forbid_self = False
-
-        self.v0 = None
-        self.configs = None
-        self.pes = None
-        self.bp = None
-        self.net = None
+        self.paramtab = None            # a ParamTable object, containing all parameters
+        self.v0 = None                  # map from Params to float
+        self.efd = None                 # map from Transitions to either a Param or float
+        self.lfd = None                 # map from Transitions to either a Param or float
 
     def parse_cmdline_args (self) :
+
+        self.arg_param_efd = {}
+        self.arg_param_lfd = {}
+        self.arg_v0 = {}
+
+        self.arg_pnmlfile = './benchmarks/fig2.pnml'
+        self.arg_param_lfd['b'] = 'x1'
+        self.arg_param_lfd['c'] = 'x2'
+        self.arg_v0['x1'] = 1
+        self.arg_v0['x2'] = 3.5
+
+        #self.arg_pnmlfile = './benchmarks/tina/abp.pnml'
+        #self.arg_param_efd['t2'] = 'x1'
+        #self.arg_param_lfd['t2'] = 'x2'
+        #self.arg_param_efd['t3'] = 'x3'
+        #self.arg_v0['x1'] = 12
+
+        return
 
         cmd_choices = [
                 "compare-independence",
@@ -309,28 +244,85 @@ class Main :
 
     def main (self) :
 
-        test10 ()
-        return
+        #print size_human (100)
+        #print size_human (1000)
+        #print size_human (2000)
+        #print size_human (3000)
+        #print size_human (4000)
+        #print size_human (8000)
+        #print size_human (10 * 1024 + 600)
+        #print size_human (1023 * 1024 + 600)
+        #print size_human (1024 * 1024 * 2.5)
+        #print size_human (1024 * 1024 * 600)
+        #print size_human (1024 * 1024 * 1026)
+        #print size_human (1024 * 1024 * 8026)
+        #print size_human (1024 * 1024 * 8026 * 1024)
+        #return
+
 
         self.parse_cmdline_args ()
-        #sys.exit (0)
 
-        if self.arg_command == "extract-dependence" :
-            self.cmd_extract_dependence ()
-        elif self.arg_command == "compare-independence" :
-            self.cmd_compare_independence ()
-        elif self.arg_command == "extract-log" :
-            self.cmd_extract_log ()
-        elif self.arg_command == "dump-log" :
-            self.cmd_dump_log ()
-        elif self.arg_command == "dump-pes" :
-            self.cmd_dump_pes ()
-        elif self.arg_command == "net-stats" :
-            self.cmd_net_stats ()
-        elif self.arg_command == "discover" :
-            self.cmd_discover ()
-        else :
-            print 'pod: command not yet implemented'
+        # load the net
+        self.net = load_tpn (self.arg_pnmlfile, "pnml", "impo")
+        print 'impo: note: delay interval closure info (open, close) will be completely ignored'
+        
+        # unfold with cunf
+        self.export_and_unfold ()
+
+        # transform into PES
+        print 'impo: unf > pes: extracting underlying PES from unfolding'
+        self.pes = pes.bp_to_pes (self.bp)
+        print 'impo: unf > pes: done'
+
+        # extract maximal configurations
+        print 'impo: pes > conf: enumerating all maximal PES configurations'
+        #l = self.pes.iter_max_confs ()
+        #for mx in l :
+        #    print 'max conf:', mx
+        self.assert_max_confs ()
+
+    def assert_max_confs (self) :
+        l = self.pes.iter_max_confs ()
+        for mx in l :
+            print 'max conf:', mx
+        print 'running assertions ............'
+        for mx in l :
+            # verify that every two maximal events of a config are not in conflict
+            for e in mx :
+                for ee in mx :
+                    assert not self.pes.in_cfl (e, ee)
+            # so causal closure is indeed a configuration, maximal?
+            c = self.pes.get_local_config (mx)
+            assert len (c.enabled ()) == 0
+        print 'done, all claimed maximal configurations are indeed so'
+
+    def export_and_unfold (self) :
+
+        # export in ll_net into temporary file
+        print 'impo: net > unf: exporting net in ll_net format'
+        fnet, netpath = tempfile.mkstemp (suffix='.ll_net')
+        fcuf, cufpath = tempfile.mkstemp (suffix='.cuf')
+        os.close (fcuf)
+        f = os.fdopen (fnet, 'w')
+        self.net.write (f, 'pep')
+        f.close ()
+        print 'impo: net > unf: done'
+
+        # call cunf
+        cmd = ['cunf', netpath]
+        cmd.append ('--save=%s' % cufpath)
+        cmd.append ('--stats')
+        cmd.append ('--cutoff=none')
+        cmd.append ('--max-events=100')
+        exitcode, out = runit (cmd, prefix='impo: net > unf')
+        if exitcode != 0 :
+            raise Exception, 'cunf unfolder: exit code %d, output: "%s"' % (exitcode, out)
+        print 'impo: net > unf: unfolder terminated correctly'
+        print 'impo: net > unf: cunf stdout: "%s"' % out
+
+        # load unfolding
+        self.bp = load_bp (cufpath, 'impo: net > cuf')
+
 
     def load_coe_pairs (self, path) :
         try :
@@ -350,8 +342,8 @@ class Main :
 
     def cmd_compare_independence (self) :
         # load the two nets
-        net1 = load_net (self.arg_log_path, "pnml", "pod: cmp-indep: ")
-        net2 = load_net (self.arg_depen_path, "pnml", "pod: cmp-indep: ")
+        net1 = load_tpn (self.arg_log_path, "pnml", "pod: cmp-indep: ")
+        net2 = load_tpn (self.arg_depen_path, "pnml", "pod: cmp-indep: ")
 
         if False :
             path = self.arg_log_path[:-4] + "coe"
@@ -412,7 +404,7 @@ class Main :
     def cmd_extract_dependence (self) :
 
         # load the net
-        net = load_net (self.arg_log_path, "pnml", "pod: extract-dep: ")
+        net = load_tpn (self.arg_log_path, "pnml", "pod: extract-dep: ")
 
         # create a dependence relation and fill it from the net
         dep = Depen ()
@@ -447,7 +439,7 @@ class Main :
 
     def cmd_extract_log (self) :
         # load the net
-        net = load_net (self.arg_log_path, "pnml", "pod: extract-log: ")
+        net = load_tpn (self.arg_log_path, "pnml", "pod: extract-log: ")
         acset = ActionSet
         log = Log ()
 
@@ -503,7 +495,7 @@ class Main :
 
     def cmd_net_stats (self) :
         # load the net
-        net = load_net (self.arg_log_path, "pnml", "pod: stats: ")
+        net = load_tpn (self.arg_log_path, "pnml", "pod: stats: ")
 
         d = {}
         d["net.transitions"] = len (net.trans)
@@ -801,5 +793,23 @@ class Main :
             print 'pod: bp > net: asserting correctness: skipping !!'
         else :
             bp_to_net_assert_sp (self.bp, self.meq, e2t, c2p)
+
+class Param (str) :
+    pass
+
+class ParamTable :
+    def __init__ (self) :
+        self.__tab = {}
+    def get (self, name) :
+        try :
+            return self.__tab[name]
+        except KeyError :
+            p = Param (name)
+            self.__tab[name] = p
+            return p
+    def __getitem__ (self, name) :
+        return self.get (name)
+    def __str__ (self) :
+        return str (self.__tab)
 
 # vi:ts=4:sw=4:et:
