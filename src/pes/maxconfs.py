@@ -12,13 +12,13 @@ def enum_max_conf (pes, c, d, a, enum, want=0) :
     # invariants
     # - all events in d are enabled at c (none is in cex(c))
 
-    print 'emc:', 'x' * 50
-    print 'emc: call: c %s d %s a %s want %d' % (c.events, d, a, want)
+    #print 'emc:', 'x' * 50
+    #print 'emc: call: c %s d %s a %s want %d' % (c.events, d, a, want)
 
     # if maximal configuration, backtrack
     en = c.enabled ()
     if len (en) == 0 :
-        print 'emc: MAX:', c
+        #print 'emc: MAX:', c
         if want == 0 :
             enum.append (list (c.maximal ()))
         elif want == 1 :
@@ -36,7 +36,7 @@ def enum_max_conf (pes, c, d, a, enum, want=0) :
         else :
             e = next (iter (en))
             a = -1 # optimization
-    print 'emc: picked %s en %s a %d' % (repr (e), c.enabled (), a)
+    #print 'emc: picked %s en %s a %d' % (repr (e), c.enabled (), a)
 
     # left subtree, we create copies of c and d, so the recursive call is
     # free to handle them as it wants
@@ -51,10 +51,8 @@ def enum_max_conf (pes, c, d, a, enum, want=0) :
 
     # right subtree
     if a != -1 :
-        print 'emc: found alternative, exploring right subtree'
+        #print 'emc: found alternative, exploring right subtree'
         enum_max_conf (pes, c, d, a, enum, want)
-    else :
-        print 'emc: found no alternative, returning'
 
 def __enum_max_conf_clean_d (pes, c, d, last) :
     # every event in d is ether enabled at c or in immediate conflict with
@@ -63,7 +61,7 @@ def __enum_max_conf_clean_d (pes, c, d, last) :
 
 def __enum_max_conf_alt (pes, c, d) :
     # mark all events in conflict with at least one event in c
-    print 'alt: c %s d %s' % (c.events, d)
+    #print 'alt: c %s d %s' % (c.events, d)
     m = pes.new_mark ()
     l = []
     for e in c : l.extend (e.cfl)
@@ -74,7 +72,7 @@ def __enum_max_conf_alt (pes, c, d) :
     clauses = [[ep for ep in e.cfl if ep.m != m] for e in d]
     comb = Comb (pes, clauses)
     sol = comb.explore ()
-    print 'alt: c %s d %s alt %s' % (c.events, d, sol)
+    #print 'alt: c %s d %s alt %s' % (c.events, d, sol)
 
     # if we got a solution, mark it and return the mark
     if sol == None : return -1
@@ -89,9 +87,9 @@ class Comb :
         self.size = len (clauses)
         self.top = 0
 
-        print 'comb: new comb, size', self.size
-        for wl in self.comb :
-            print 'comb:  ', wl
+        #print 'comb: new comb, size', self.size
+        #for wl in self.comb :
+        #    print 'comb:  ', wl
 
     def explore (self) :
         # a comb with 0 spikes has a trivial empty solution

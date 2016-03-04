@@ -79,7 +79,7 @@ def load_bp (path, prefix='impo') :
     return bp
 
 def runit (args, timeout=-1, sh=False, prefix='impo: ') :
-    print prefix, 'cmd:', args, 'timeout', timeout
+    #print prefix, 'cmd:', args, 'timeout', timeout
     try :
         p = subprocess.Popen (args, bufsize=8192, stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
@@ -135,8 +135,8 @@ def polyop (query, prefix='impo: ') :
         exitcode, out = runit (cmd, prefix=prefix)
         if exitcode != 0 :
             raise Exception, 'polyop: exit code %d, output: "%s"' % (exitcode, out)
-        print prefix, 'exit code 0'
-        #print prefix, 'poly stdout: "%s"' % out
+        #print prefix, 'exit code 0'
+        #print prefix, 'stdout: "%s"' % out
 
         # load result
         outpath = inpath + '.res'
@@ -144,11 +144,18 @@ def polyop (query, prefix='impo: ') :
 
     finally :
         # remove temporary files
-        if inpath != None : os.unlink (inpath)
+        #if inpath != None : os.unlink (inpath)
         if outpath != None : os.unlink (outpath)
 
     # strip and return
     return res.strip (' \t\n')
+
+def polyop_replace_ors (const) :
+    l = const.split ()
+    #print 'tokenization', l
+    for i in range (len (l)) :
+        if l[i] == 'OR' : l[i] = 'or'
+    return ' '.join (l)
 
 def avg_iter (it) :
     s = 0

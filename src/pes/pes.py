@@ -253,8 +253,9 @@ class PES :
 
     def in_cfl (self, e1, e2) :
         v = self.__in_cfl (e1, e2)
-        print "cfl %s %s %s" % (repr (e1), repr (e2), v)
+        #print "cfl %s %s %s" % (repr (e1), repr (e2), v)
         return v
+
     def __in_cfl (self, e1, e2) :
         k = self.__sorted_pair (e1, e2)
         try :

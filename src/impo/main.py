@@ -99,6 +99,8 @@ class Main :
         self.k0const = None             # initial constraint on parameters (string)
         self.v0const = None             # p1 = v0[p1], p2 = v0[p2], etc (string)
 
+        self.final_const = None         # final constraint
+
     def parse_cmdline_args (self) :
 
         self.arg_param_efd = {}
@@ -269,9 +271,11 @@ class Main :
         self.relabel_pes ()
 
         # extract maximal configurations
-        self.pes.write (sys.stdout, 'dot')
+        #self.pes.write (sys.stdout, 'dot')
         print 'impo: pes > conf: enumerating all maximal PES configurations'
         mxconfs = self.pes.iter_max_confs ()
+        avg = avg_iter (len (c.events) for c in mxconfs)
+        print 'impo: pes > conf: done, %d confs, %.2f ev/conf (avg)' % (len (mxconfs), avg)
 
         # IMPO method :
         # for every maximal config:
@@ -283,7 +287,7 @@ class Main :
 
         l = []
         for c in mxconfs :
-            print 'impo: con > eq: *** new configuration:'
+            print 'impo: con > eq: ===== new configuration:'
             print 'impo: con > eq:   all', long_list (c.events)
             print 'impo: con > eq:   mx ', long_list (c.maximal ())
             print 'impo: con > eq:   cex', long_list (c.cex ())
@@ -292,25 +296,59 @@ class Main :
             const = ConfigConst (c, self.efd, self.lfd, self.v0const)
             const.generate ()
 
-            print 'impo: con > eq: existential quantification of clock/doe/dod vars'
+            #print 'impo: con > eq: existential quantification of clock/doe/dod vars'
+            print 'impo: con > eq: existential quantification'
             const2 = const.hide ()
 
             print 'impo: con > eq: checking whether v0 compatible'
             if const2.does_include_v0 () :
                 print 'impo: con > eq: v0-compatible, skipping'
-                #continue
+                continue
 
             print 'impo: con > eq: negating constraint'
             const3 = const2.negate ()
             l.append (const3)
-            print const3
 
         # compute final conjunction, adding k0
         self.compute_final_constraint (l)
 
+        # print results
+        self.print_results ()
+
+    def print_results (self) :
+        print '=' * 80
+        print 'Constraint k0:'
+        l = self.k0const.splitlines ()
+        l = l[1:-1]
+        print '\n'.join (l)
+        print
+
+        print 'Reference valuation v0:'
+        l = self.v0const.splitlines ()
+        l = l[1:-1]
+        print '\n'.join (l)
+        print
+
+        print 'Generated constraint:'
+        print self.final_const
+        print
 
     def compute_final_constraint (self, l) :
-        pass
+        query = 'simplify and (\n (* k0 constraint *)\n'
+        query += self.k0const + ',\n\n'
+        for cst in l : query += '(%s),\n\n' % cst.const
+        query += ')\n'
+
+        # simplify with polyop
+        print 'impo: simplifying conjunction of negated constraints'
+        output = polyop (query, 'impo:  ')
+        print 'impo:   query:', long_str (repr (query))
+        print 'impo:   result:', long_str (repr (output))
+        output = polyop_replace_ors (output)
+        print 'impo:   replace:', long_str (repr (output))
+        if output == 'error' :
+            raise Exception, "Internal error: polyop returned `error' result file"
+        self.final_const = output
 
     def setup_params_v0_k0 (self) :
         # formatting
@@ -378,7 +416,7 @@ class Main :
             if isinstance (self.efd[t], Param) or isinstance (self.lfd[t], Param) :
                 self.k0const += ' %s <= %s, (* transition %s *)\n' % \
                         (str (self.efd[t]), str (self.lfd[t]), t.name)
-        self.k0const = ')\n'
+        self.k0const += ')\n'
 
         # build v0const
         self.v0const = 'and (\n'
@@ -440,15 +478,17 @@ class Main :
             print 'impo: net > unf: done'
 
             # call cunf
+            print 'impo: net > unf: running cunf ...'
             cmd = ['cunf', netpath]
             cmd.append ('--save=%s' % cufpath)
             cmd.append ('--stats')
             cmd.append ('--cutoff=none')
             cmd.append ('--max-events=5')
+            print 'impo: net > unf: cmd', cmd
             exitcode, out = runit (cmd, prefix='impo: net > unf: ')
             if exitcode != 0 :
                 raise Exception, 'cunf unfolder: exit code %d, output: "%s"' % (exitcode, out)
-            print 'impo: net > unf: exit code 0'
+            print 'impo: net > unf: done, exit code 0'
             #print 'impo: net > unf: cunf stdout:', repr (out)
 
             # load unfolding
@@ -1001,10 +1041,15 @@ class ConfigConst :
         output = polyop (query, 'impo: con > eq:  ')
         print 'impo: con > eq:   query:', long_str (repr (query))
         print 'impo: con > eq:   result:', long_str (repr (output))
+        output = polyop_replace_ors (output)
+        print 'impo: con > eq:   replace:', long_str (repr (output))
+
+        if output == 'error' :
+            raise Exception, "Internal error: polyop returned `error' result file"
 
         # build a new constraint and return it
         c = ConfigConst (self.c, self.efd, self.lfd, self.v0const)
-        c.const = output
+        c.const = polyop_replace_ors (output)
         return c
 
     def negate (self) :
@@ -1012,6 +1057,11 @@ class ConfigConst :
         output = polyop (query, 'impo: con > eq:  ')
         print 'impo: con > eq:   query:', long_str (repr (query))
         print 'impo: con > eq:   result:', long_str (repr (output))
+        output = polyop_replace_ors (output)
+        print 'impo: con > eq:   replace:', long_str (repr (output))
+
+        if output == 'error' :
+            raise Exception, "Internal error: polyop returned `error' result file"
 
         # build a new constraint and return it
         c = ConfigConst (self.c, self.efd, self.lfd, self.v0const)
