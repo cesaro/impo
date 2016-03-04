@@ -1,0 +1,99 @@
+<pnml xmlns="http://www.pnml.org/version-2009/grammar/pnml">
+ <net id="n-76CB-2DCA7-0" type ="http://www.pnml.org/version-2009/grammar/ptnet">
+  <name>
+   <text>l6000</text>
+  </name>
+ <page id="g-76CB-2DD44-1">
+  <place id="p-76CB-2DDA2-2">
+  <name>
+   <text>p1</text>
+  </name>
+   <initialMarking>
+    <text>6000</text>
+   </initialMarking>
+  </place>
+  <place id="p-76CB-2DE03-3">
+  <name>
+   <text>p2</text>
+  </name>
+  </place>
+  <place id="p-76CB-2DE0B-4">
+  <name>
+   <text>p3</text>
+  </name>
+   <initialMarking>
+    <text>2000</text>
+   </initialMarking>
+  </place>
+  <transition id="t-76CB-2DE13-5">
+  <name>
+   <text>t1</text>
+  </name>
+  </transition>
+  <transition id="t-76CB-2DE1A-6">
+  <name>
+   <text>t2</text>
+  </name>
+  </transition>
+  <transition id="t-76CB-2DE37-7">
+  <name>
+   <text>t3</text>
+  </name>
+  </transition>
+  <arc id="e-76CB-2DE7A-8" source="p-76CB-2DDA2-2" target="t-76CB-2DE13-5">
+   <inscription>
+    <text>6000</text>
+   </inscription>
+  </arc>
+  <arc id="e-76CB-2DE98-9" source="p-76CB-2DE03-3" target="t-76CB-2DE37-7">
+  </arc>
+  <arc id="e-76CB-2DE9F-10" source="t-76CB-2DE37-7" target="p-76CB-2DE0B-4">
+   <inscription>
+    <text>2000</text>
+   </inscription>
+  </arc>
+  <arc id="e-76CB-2DEA6-11" source="t-76CB-2DE37-7" target="p-76CB-2DDA2-2">
+   <inscription>
+    <text>2</text>
+   </inscription>
+  </arc>
+  <arc id="e-76CB-2DEAD-12" source="p-76CB-2DE0B-4" target="t-76CB-2DE13-5">
+   <inscription>
+    <text>2</text>
+   </inscription>
+  </arc>
+  <arc id="e-76CB-2DEB3-13" source="t-76CB-2DE13-5" target="p-76CB-2DDA2-2">
+   <inscription>
+    <text>6000</text>
+   </inscription>
+  </arc>
+  <arc id="e-76CB-2DEBA-14" source="t-76CB-2DE13-5" target="p-76CB-2DE03-3">
+   <inscription>
+    <text>3</text>
+   </inscription>
+  </arc>
+  <arc id="e-76CB-2DEC0-15" source="p-76CB-2DE03-3" target="t-76CB-2DE1A-6">
+   <inscription>
+    <text>3000</text>
+   </inscription>
+  </arc>
+  <arc id="e-76CB-2DEC7-16" source="p-76CB-2DDA2-2" target="t-76CB-2DE1A-6">
+   <inscription>
+    <text>3</text>
+   </inscription>
+  </arc>
+  <arc id="e-76CB-2DECE-17" source="t-76CB-2DE1A-6" target="p-76CB-2DE0B-4">
+  </arc>
+  <arc id="e-76CB-2DEF3-18" source="t-76CB-2DE1A-6" target="p-76CB-2DE03-3">
+   <inscription>
+    <text>3000</text>
+   </inscription>
+  </arc>
+  <arc id="e-76CB-2DEFA-19" source="p-76CB-2DE0B-4" target="t-76CB-2DE37-7">
+   <inscription>
+    <text>2000</text>
+   </inscription>
+  </arc>
+ </page>
+ </net>
+</pnml>

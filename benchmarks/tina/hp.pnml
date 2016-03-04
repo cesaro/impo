@@ -1,0 +1,185 @@
+<pnml xmlns="http://www.pnml.org/version-2009/grammar/pnml">
+ <net id="n-6C37-7D65A-0" type ="http://www.pnml.org/version-2009/grammar/ptnet">
+  <name>
+   <text>hp</text>
+  </name>
+ <page id="g-6C37-7D782-1">
+  <place id="p-6C37-7D845-2">
+  <name>
+   <text>A</text>
+    <graphics>
+     <offset x="10" y="0" />
+    </graphics>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+   <graphics>
+    <position x="90" y="170"/>
+   </graphics>
+  </place>
+  <place id="p-6C37-7D9F8-3">
+  <name>
+   <text>B</text>
+    <graphics>
+     <offset x="-10" y="0" />
+    </graphics>
+  </name>
+   <graphics>
+    <position x="210" y="170"/>
+   </graphics>
+  </place>
+  <place id="p-6C37-7DA1A-4">
+  <name>
+   <text>C</text>
+    <graphics>
+     <offset x="0" y="10" />
+    </graphics>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+   <graphics>
+    <position x="150" y="290"/>
+   </graphics>
+  </place>
+  <place id="p-6C37-7DA39-5">
+  <name>
+   <text>D</text>
+    <graphics>
+     <offset x="0" y="-10" />
+    </graphics>
+  </name>
+   <graphics>
+    <position x="150" y="50"/>
+   </graphics>
+  </place>
+  <place id="p-6C37-7DA57-6">
+  <name>
+   <text>E</text>
+    <graphics>
+     <offset x="0" y="-10" />
+    </graphics>
+  </name>
+   <graphics>
+    <position x="350" y="170"/>
+   </graphics>
+  </place>
+  <transition id="t-6C37-7DA75-7">
+  <name>
+   <text>a</text>
+    <graphics>
+     <offset x="0" y="0" />
+    </graphics>
+  </name>
+   <graphics>
+    <position x="270" y="170"/>
+   </graphics>
+  </transition>
+  <transition id="t-6C37-7DA87-8">
+  <name>
+   <text>b</text>
+    <graphics>
+     <offset x="0" y="0" />
+    </graphics>
+  </name>
+   <graphics>
+    <position x="30" y="170"/>
+   </graphics>
+  </transition>
+  <transition id="t-6C37-7DA87-9">
+  <name>
+   <text>c</text>
+    <graphics>
+     <offset x="0" y="0" />
+    </graphics>
+  </name>
+   <graphics>
+    <position x="150" y="110"/>
+   </graphics>
+  </transition>
+  <transition id="t-6C37-7DCCB-10">
+  <name>
+   <text>d</text>
+    <graphics>
+     <offset x="0" y="0" />
+    </graphics>
+  </name>
+   <graphics>
+    <position x="150" y="230"/>
+   </graphics>
+  </transition>
+  <arc id="e-6C37-7DD46-11" source="t-6C37-7DA75-7" target="p-6C37-7DA39-5">
+   <graphics>
+    <position x="270" y="126" />
+    <position x="194" y="50" />
+   </graphics>  </arc>
+  <arc id="e-6C37-7DD8D-12" source="p-6C37-7D9F8-3" target="t-6C37-7DCCB-10">
+   <graphics>
+    <position x="210" y="198" />
+    <position x="178" y="230" />
+   </graphics>  </arc>
+  <arc id="e-6C37-7DD9A-13" source="t-6C37-7DCCB-10" target="p-6C37-7D845-2">
+   <graphics>
+    <position x="122" y="230" />
+    <position x="90" y="198" />
+   </graphics>  </arc>
+  <arc id="e-6C37-7DDA5-14" source="p-6C37-7D845-2" target="t-6C37-7DA87-9">
+   <graphics>
+    <position x="90" y="142" />
+    <position x="122" y="110" />
+   </graphics>  </arc>
+  <arc id="e-6C37-7DDD6-15" source="t-6C37-7DA75-7" target="p-6C37-7DA57-6">
+   <graphics>
+    <position x="318" y="170" />
+    <position x="302" y="170" />
+   </graphics>  </arc>
+  <arc id="e-6C37-7DDE2-16" source="p-6C37-7DA39-5" target="t-6C37-7DA87-8">
+   <graphics>
+    <position x="106" y="50" />
+    <position x="30" y="126" />
+   </graphics>  </arc>
+  <arc id="e-6C37-7DDED-17" source="t-6C37-7DA87-8" target="p-6C37-7DA1A-4">
+   <graphics>
+    <position x="30" y="214" />
+    <position x="106" y="290" />
+   </graphics>  </arc>
+  <arc id="e-6C37-7DDF8-18" source="p-6C37-7DA1A-4" target="t-6C37-7DA75-7">
+   <graphics>
+    <position x="194" y="290" />
+    <position x="270" y="214" />
+   </graphics>  </arc>
+  <arc id="e-6C37-7DE02-19" source="p-6C37-7DA39-5" target="t-6C37-7DA87-9">
+   <graphics>
+    <position x="134" y="66" />
+    <position x="134" y="90" />
+   </graphics>  </arc>
+  <arc id="e-6C37-7DE0D-20" source="t-6C37-7DA87-9" target="p-6C37-7DA39-5">
+   <graphics>
+    <position x="166" y="90" />
+    <position x="166" y="66" />
+   </graphics>  </arc>
+  <arc id="e-6C37-7DE18-21" source="t-6C37-7DCCB-10" target="p-6C37-7DA1A-4">
+   <graphics>
+    <position x="134" y="250" />
+    <position x="134" y="274" />
+   </graphics>  </arc>
+  <arc id="e-6C37-7E1D1-22" source="p-6C37-7DA1A-4" target="t-6C37-7DCCB-10">
+   <graphics>
+    <position x="166" y="274" />
+    <position x="166" y="250" />
+   </graphics>  </arc>
+  <arc id="e-6C37-7E205-23" source="t-6C37-7DA87-9" target="p-6C37-7D9F8-3">
+   <inscription>
+    <text>2</text>
+    <graphics>
+     <offset x="10" y="0" />
+    </graphics>
+   </inscription>
+   <graphics>
+    <position x="178" y="110" />
+    <position x="210" y="142" />
+   </graphics>  </arc>
+ </page>
+ </net>
+</pnml>

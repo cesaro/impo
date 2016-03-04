@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pnml xmlns="http://www.pnml.org/version-2009/grammar/pnml">
+ <net id="n-7607-2CD3-0" type ="http://www.laas.fr/tina/tpn">
+  <name>
+   <text>fig5</text>
+  </name>
+ <page id="g-7607-2D6D-1">
+  <place id="p-7607-2DCA-2">
+  <name>
+   <text>p0</text>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+  </place>
+  <place id="p-7607-2E2F-3">
+  <name>
+   <text>p1</text>
+  </name>
+  </place>
+  <place id="p-7607-2E36-4">
+  <name>
+   <text>p2</text>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+  </place>
+  <place id="p-7607-2E3E-5">
+  <name>
+   <text>p3</text>
+  </name>
+  </place>
+  <place id="p-7607-2E44-6">
+  <name>
+   <text>p4</text>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+  </place>
+  <place id="p-7607-2E4B-7">
+  <name>
+   <text>p5</text>
+  </name>
+  </place>
+  <place id="p-7607-2E71-8">
+  <name>
+   <text>p6</text>
+  </name>
+  </place>
+  <place id="p-7607-2E78-9">
+  <name>
+   <text>p7</text>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+  </place>
+  <place id="p-7607-2E7F-10">
+  <name>
+   <text>p8</text>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+  </place>
+  <place id="p-7607-2E86-11">
+  <name>
+   <text>p9</text>
+  </name>
+  </place>
+  <transition id="t-7607-2E8D-12">
+  <name>
+   <text>t1</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>0</cn>
+     <cn>1</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-7607-2E96-13">
+  <name>
+   <text>t2</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>0</cn>
+     <cn>1</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-7607-2EB5-14">
+  <name>
+   <text>t3</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>6</cn>
+     <cn>7</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-7607-2EBD-15">
+  <name>
+   <text>t4</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>6</cn>
+     <cn>7</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-7607-2EC5-16">
+  <name>
+   <text>t5</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>1</cn>
+     <cn>2</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-7607-2ECD-17">
+  <name>
+   <text>t6</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>1</cn>
+     <cn>2</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-7607-2ED5-18">
+  <name>
+   <text>t7</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>1</cn>
+     <cn>2</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-7607-2F00-19">
+  <name>
+   <text>t8</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>1</cn>
+     <cn>2</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-7607-2F09-20">
+  <name>
+   <text>t9</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>1</cn>
+     <cn>2</cn>
+    </interval>
+   </delay>
+  </transition>
+  <arc id="e-7607-2F4C-21" source="p-7607-2DCA-2" target="t-7607-2E8D-12">
+  </arc>
+  <arc id="e-7607-2F68-22" source="p-7607-2E44-6" target="t-7607-2EBD-15">
+  </arc>
+  <arc id="e-7607-2F6F-23" source="t-7607-2EBD-15" target="p-7607-2E4B-7">
+  </arc>
+  <arc id="e-7607-2F76-24" source="t-7607-2EBD-15" target="p-7607-2E2F-3">
+  </arc>
+  <arc id="e-7607-2F7C-25" source="p-7607-2E3E-5" target="t-7607-2EC5-16">
+  </arc>
+  <arc id="e-7607-2F82-26" source="p-7607-2E78-9" target="t-7607-2EC5-16">
+  </arc>
+  <arc id="e-7607-2F88-27" source="t-7607-2EC5-16" target="p-7607-2E71-8">
+  </arc>
+  <arc id="e-7607-2F8F-28" source="t-7607-2EC5-16" target="p-7607-2E3E-5">
+  </arc>
+  <arc id="e-7607-314C-29" source="p-7607-2E36-4" target="t-7607-2ECD-17">
+  </arc>
+  <arc id="e-7607-315E-30" source="p-7607-2E71-8" target="t-7607-2ECD-17">
+  </arc>
+  <arc id="e-7607-3164-31" source="t-7607-2ECD-17" target="p-7607-2E78-9">
+  </arc>
+  <arc id="e-7607-316B-32" source="t-7607-2E8D-12" target="p-7607-2E2F-3">
+  </arc>
+  <arc id="e-7607-3171-33" source="t-7607-2ECD-17" target="p-7607-2E36-4">
+  </arc>
+  <arc id="e-7607-3178-34" source="p-7607-2E86-11" target="t-7607-2ED5-18">
+  </arc>
+  <arc id="e-7607-317E-35" source="p-7607-2E44-6" target="t-7607-2ED5-18">
+  </arc>
+  <arc id="e-7607-3184-36" source="t-7607-2ED5-18" target="p-7607-2E44-6">
+  </arc>
+  <arc id="e-7607-318B-37" source="t-7607-2ED5-18" target="p-7607-2E7F-10">
+  </arc>
+  <arc id="e-7607-3191-38" source="p-7607-2E4B-7" target="t-7607-2F00-19">
+  </arc>
+  <arc id="e-7607-3198-39" source="p-7607-2E78-9" target="t-7607-2F00-19">
+  </arc>
+  <arc id="e-7607-319E-40" source="p-7607-2E7F-10" target="t-7607-2F00-19">
+  </arc>
+  <arc id="e-7607-31C8-41" source="t-7607-2F00-19" target="p-7607-2E4B-7">
+  </arc>
+  <arc id="e-7607-31CF-42" source="t-7607-2F00-19" target="p-7607-2E78-9">
+  </arc>
+  <arc id="e-7607-31D5-43" source="p-7607-2E36-4" target="t-7607-2E96-13">
+  </arc>
+  <arc id="e-7607-31DC-44" source="t-7607-2F00-19" target="p-7607-2E86-11">
+  </arc>
+  <arc id="e-7607-31E2-45" source="p-7607-2E71-8" target="t-7607-2F09-20">
+  </arc>
+  <arc id="e-7607-31E9-46" source="p-7607-2E86-11" target="t-7607-2F09-20">
+  </arc>
+  <arc id="e-7607-31EF-47" source="t-7607-2F09-20" target="p-7607-2E71-8">
+  </arc>
+  <arc id="e-7607-31F5-48" source="t-7607-2F09-20" target="p-7607-2E7F-10">
+  </arc>
+  <arc id="e-7607-31FC-49" source="t-7607-2E96-13" target="p-7607-2E3E-5">
+  </arc>
+  <arc id="e-7607-3202-50" source="p-7607-2DCA-2" target="t-7607-2EB5-14">
+  </arc>
+  <arc id="e-7607-3208-51" source="p-7607-2E4B-7" target="t-7607-2EB5-14">
+  </arc>
+  <arc id="e-7607-320F-52" source="t-7607-2EB5-14" target="p-7607-2E44-6">
+  </arc>
+  <arc id="e-7607-3215-53" source="t-7607-2EB5-14" target="p-7607-2DCA-2">
+  </arc>
+  <arc id="e-7607-3233-54" source="p-7607-2E2F-3" target="t-7607-2EBD-15">
+  </arc>
+ </page>
+ </net>
+</pnml>

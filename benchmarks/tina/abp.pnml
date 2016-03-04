@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pnml xmlns="http://www.pnml.org/version-2009/grammar/pnml">
+ <net id="n-6C32-66968-0" type ="http://www.laas.fr/tina/tpn">
+  <name>
+   <text>abp</text>
+  </name>
+ <page id="g-6C32-66A50-1">
+  <place id="p-6C32-66B1C-2">
+  <name>
+   <text>p1</text>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+  </place>
+  <place id="p-6C32-66BED-3">
+  <name>
+   <text>p10</text>
+  </name>
+  </place>
+  <place id="p-6C32-66C2F-4">
+  <name>
+   <text>p11</text>
+  </name>
+  </place>
+  <place id="p-6C32-66C3F-5">
+  <name>
+   <text>p12</text>
+  </name>
+  </place>
+  <place id="p-6C32-66C4D-6">
+  <name>
+   <text>p2</text>
+  </name>
+  </place>
+  <place id="p-6C32-66C5C-7">
+  <name>
+   <text>p3</text>
+  </name>
+  </place>
+  <place id="p-6C32-66C6A-8">
+  <name>
+   <text>p4</text>
+  </name>
+  </place>
+  <place id="p-6C32-66CA9-9">
+  <name>
+   <text>p5</text>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+  </place>
+  <place id="p-6C32-66CBA-10">
+  <name>
+   <text>p6</text>
+  </name>
+  </place>
+  <place id="p-6C32-66CC9-11">
+  <name>
+   <text>p7</text>
+  </name>
+  </place>
+  <place id="p-6C32-66CD8-12">
+  <name>
+   <text>p8</text>
+  </name>
+  </place>
+  <place id="p-6C32-66CE6-13">
+  <name>
+   <text>p9</text>
+  </name>
+  </place>
+  <transition id="t-6C32-66CF5-14">
+  <name>
+   <text>t1</text>
+  </name>
+  </transition>
+  <transition id="t-6C32-66D4D-15">
+  <name>
+   <text>t10</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>0</cn>
+     <cn>1</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-6C32-66D64-16">
+  <name>
+   <text>t11</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>0</cn>
+     <cn>2</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-6C32-66D76-17">
+  <name>
+   <text>t12</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>0</cn>
+     <cn>1</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-6C32-66D88-18">
+  <name>
+   <text>t13</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>0</cn>
+     <cn>1</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-6C32-66D9A-19">
+  <name>
+   <text>t14</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>0</cn>
+     <cn>1</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-6C32-66E1B-20">
+  <name>
+   <text>t15</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>0</cn>
+     <cn>1</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-6C32-66E2E-21">
+  <name>
+   <text>t16</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>0</cn>
+     <cn>1</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-6C32-66E40-22">
+  <name>
+   <text>t2</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed-open">
+     <cn>5</cn>
+     <cn>6</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-6C32-66E53-23">
+  <name>
+   <text>t3</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>0</cn>
+     <cn>1</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-6C32-66E65-24">
+  <name>
+   <text>t4</text>
+  </name>
+  </transition>
+  <transition id="t-6C32-66EA5-25">
+  <name>
+   <text>t5</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>5</cn>
+     <cn>6</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-6C32-66EB8-26">
+  <name>
+   <text>t6</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>0</cn>
+     <cn>1</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-6C32-66ECA-27">
+  <name>
+   <text>t7</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>0</cn>
+     <cn>1</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-6C32-6726C-28">
+  <name>
+   <text>t8</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>0</cn>
+     <cn>2</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-6C32-67282-29">
+  <name>
+   <text>t9</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>0</cn>
+     <cn>1</cn>
+    </interval>
+   </delay>
+  </transition>
+  <arc id="e-6C32-6734B-30" source="p-6C32-66B1C-2" target="t-6C32-66CF5-14">
+  </arc>
+  <arc id="e-6C32-6738A-31" source="p-6C32-66CA9-9" target="t-6C32-66D76-17">
+  </arc>
+  <arc id="e-6C32-6739A-32" source="p-6C32-66C2F-4" target="t-6C32-66D76-17">
+  </arc>
+  <arc id="e-6C32-673A8-33" source="t-6C32-66D76-17" target="p-6C32-66CD8-12">
+  </arc>
+  <arc id="e-6C32-673B6-34" source="p-6C32-66CE6-13" target="t-6C32-66D88-18">
+  </arc>
+  <arc id="e-6C32-673C4-35" source="p-6C32-66BED-3" target="t-6C32-66D9A-19">
+  </arc>
+  <arc id="e-6C32-673D2-36" source="p-6C32-66C2F-4" target="t-6C32-66E1B-20">
+  </arc>
+  <arc id="e-6C32-673E0-37" source="p-6C32-66C3F-5" target="t-6C32-66E2E-21">
+  </arc>
+  <arc id="e-6C32-673EE-38" source="p-6C32-66C4D-6" target="t-6C32-66E40-22">
+  </arc>
+  <arc id="e-6C32-673FD-39" source="t-6C32-66E40-22" target="p-6C32-66C4D-6">
+  </arc>
+  <arc id="e-6C32-6740A-40" source="t-6C32-66E40-22" target="p-6C32-66CE6-13">
+  </arc>
+  <arc id="e-6C32-67418-41" source="t-6C32-66CF5-14" target="p-6C32-66C4D-6">
+  </arc>
+  <arc id="e-6C32-674AD-42" source="p-6C32-66C4D-6" target="t-6C32-66E53-23">
+  </arc>
+  <arc id="e-6C32-674BC-43" source="p-6C32-66BED-3" target="t-6C32-66E53-23">
+  </arc>
+  <arc id="e-6C32-674CA-44" source="t-6C32-66E53-23" target="p-6C32-66C5C-7">
+  </arc>
+  <arc id="e-6C32-674D8-45" source="p-6C32-66C5C-7" target="t-6C32-66E65-24">
+  </arc>
+  <arc id="e-6C32-674E6-46" source="t-6C32-66E65-24" target="p-6C32-66C6A-8">
+  </arc>
+  <arc id="e-6C32-674F3-47" source="t-6C32-66E65-24" target="p-6C32-66C2F-4">
+  </arc>
+  <arc id="e-6C32-67501-48" source="p-6C32-66C6A-8" target="t-6C32-66EA5-25">
+  </arc>
+  <arc id="e-6C32-6750F-49" source="t-6C32-66EA5-25" target="p-6C32-66C6A-8">
+  </arc>
+  <arc id="e-6C32-6751C-50" source="t-6C32-66EA5-25" target="p-6C32-66C2F-4">
+  </arc>
+  <arc id="e-6C32-6752A-51" source="p-6C32-66C6A-8" target="t-6C32-66EB8-26">
+  </arc>
+  <arc id="e-6C32-67538-52" source="t-6C32-66CF5-14" target="p-6C32-66CE6-13">
+  </arc>
+  <arc id="e-6C32-67546-53" source="p-6C32-66C3F-5" target="t-6C32-66EB8-26">
+  </arc>
+  <arc id="e-6C32-675C0-54" source="t-6C32-66EB8-26" target="p-6C32-66B1C-2">
+  </arc>
+  <arc id="e-6C32-675CF-55" source="p-6C32-66CA9-9" target="t-6C32-66ECA-27">
+  </arc>
+  <arc id="e-6C32-675DC-56" source="p-6C32-66CE6-13" target="t-6C32-66ECA-27">
+  </arc>
+  <arc id="e-6C32-675EA-57" source="t-6C32-66ECA-27" target="p-6C32-66CBA-10">
+  </arc>
+  <arc id="e-6C32-675F8-58" source="p-6C32-66CBA-10" target="t-6C32-6726C-28">
+  </arc>
+  <arc id="e-6C32-67606-59" source="t-6C32-6726C-28" target="p-6C32-66CC9-11">
+  </arc>
+  <arc id="e-6C32-67613-60" source="t-6C32-6726C-28" target="p-6C32-66BED-3">
+  </arc>
+  <arc id="e-6C32-67621-61" source="p-6C32-66CC9-11" target="t-6C32-67282-29">
+  </arc>
+  <arc id="e-6C32-6762E-62" source="p-6C32-66CE6-13" target="t-6C32-67282-29">
+  </arc>
+  <arc id="e-6C32-6763C-63" source="p-6C32-66CC9-11" target="t-6C32-66D4D-15">
+  </arc>
+  <arc id="e-6C32-6764A-64" source="t-6C32-67282-29" target="p-6C32-66CBA-10">
+  </arc>
+  <arc id="e-6C32-67658-65" source="p-6C32-66C2F-4" target="t-6C32-66D4D-15">
+  </arc>
+  <arc id="e-6C32-676A7-66" source="t-6C32-66D4D-15" target="p-6C32-66CD8-12">
+  </arc>
+  <arc id="e-6C32-676B5-67" source="p-6C32-66CD8-12" target="t-6C32-66D64-16">
+  </arc>
+  <arc id="e-6C32-676FE-68" source="t-6C32-66D64-16" target="p-6C32-66CA9-9">
+  </arc>
+  <arc id="e-6C32-67C1B-69" source="t-6C32-66D64-16" target="p-6C32-66C3F-5">
+  </arc>
+ </page>
+ </net>
+</pnml>
