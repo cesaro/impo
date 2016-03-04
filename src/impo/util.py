@@ -144,7 +144,7 @@ def polyop (query, prefix='impo: ') :
 
     finally :
         # remove temporary files
-        #if inpath != None : os.unlink (inpath)
+        if inpath != None : os.unlink (inpath)
         if outpath != None : os.unlink (outpath)
 
     # strip and return

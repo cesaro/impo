@@ -78,6 +78,7 @@ class Main :
 
         self.arg_pnmlfile = None        # string
         self.arg_no_asserts = None      # boolean
+        self.arg_all_trans_param = None # boolean
         self.arg_param_efd = None       # map from transition names to param names
         self.arg_param_lfd = None       # map from transition names to param names
         self.arg_v0 = None              # map from parameter names to floats
@@ -131,6 +132,7 @@ class Main :
         p.add_argument ("--v0", action="append", default=[])
         p.add_argument ("--k0", default="")
         p.add_argument ("--no-asserts", action="store_true")
+        p.add_argument ("--all-trans-param", action="store_true")
         #p.add_argument ("--output")
 
         p.add_argument ('pnmlfile', metavar="PNMLFILE")
@@ -141,6 +143,7 @@ class Main :
         self.arg_pnmlfile = args.pnmlfile
         self.arg_no_asserts = args.no_asserts
         self.arg_k0 = args.k0
+        self.arg_all_trans_param = args.all_trans_param
 
         for s in args.param :
             l = s.split (',')
@@ -183,6 +186,7 @@ class Main :
                     "arg_v0",
                     "arg_k0",
                     "arg_no_asserts",
+                    "arg_all_trans_param",
                     ] :
             output_pair (sys.stdout, opt, self.__dict__[opt], 20, "impo: ")
 
@@ -306,6 +310,15 @@ class Main :
         if len (self.net.trans) :
             tl = max (len (t.name) for t in self.net.trans)
 
+        # process now the --all-trans-param option
+        if self.arg_all_trans_param :
+            nr = 0
+            for t in self.net.trans :
+                self.arg_param_efd[t.name] = 'x%d' % nr
+                nr += 1
+                self.arg_param_lfd[t.name] = 'x%d' % nr
+                nr += 1
+
         # set up lower and upper bounds, parametric or non-parametric
         netvalue = {}
         self.efd = {}
@@ -338,10 +351,10 @@ class Main :
             if p.name in self.arg_v0 :
                 self.v0[p] = self.arg_v0[p.name]
                 del self.arg_v0[p.name]
-                print "impo:   %.*s  %-10f (from cmdline)" % (pl, p.name, self.v0[p])
+                print "impo:   %-*s  %-10f (from cmdline)" % (pl, p.name, self.v0[p])
             else :
                 self.v0[p] = netvalue[p]
-                print "impo:   %.*s  %-10f (from tpn)" % (pl, p.name, self.v0[p])
+                print "impo:   %-*s  %-10f (from tpn)" % (pl, p.name, self.v0[p])
 
         # we removed used pairs from the argument mappings, if we still have
         # somthing, warning
@@ -429,7 +442,7 @@ class Main :
             cmd.append ('--save=%s' % cufpath)
             cmd.append ('--stats')
             cmd.append ('--cutoff=none')
-            cmd.append ('--max-events=5')
+            cmd.append ('--max-events=30')
             print 'impo: net > unf: cmd', cmd
             exitcode, out = runit (cmd, prefix='impo: net > unf: ')
             if exitcode != 0 :
