@@ -1,0 +1,9 @@
+
+# https://lipn.univ-paris13.fr/~andre/documents/precise-robustness-analysis-of-time-petri-nets-with-inhibitor-arcs.pdf
+
+net app13fig3b
+
+tr t1 [0, 1] A   -> C
+tr t2 [0, 1] A B -> D
+tr t3 [0, 1] B   -> E
+pl A (1)

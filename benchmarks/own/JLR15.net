@@ -1,0 +1,23 @@
+
+# http://www.irccyn.ec-nantes.fr/~lime/publis/jovanovic-TSE-14.pdf
+
+net jlr15fig8
+
+tr t1 [0,w[ p1      -> p2 p5
+tr t2 [8,9] p2    -> p2 p5
+tr t3 [0,1] p2 p6   -> p3
+tr t4 [0,w[ p3      -> p4 p7
+tr t5 [8,9] p4    -> p4 p7
+tr t6 [0,1] p4 p8   -> p1
+tr t7 [0,9] p5      ->
+tr t8 [0,1] p6      ->
+tr t9 [0,9] p7      ->
+tr t10 [0,1] p8     ->
+tr t11 [0,1] p5 p12 -> p9
+tr t12 [0,1] p5 p10 -> p9
+tr t13 [8,2] p9     -> p6 p10
+tr t14 [0,1] p7 p10 -> p11
+tr t15 [0,1] p7 p12 -> p11
+tr t16 [0,9] p11    -> p8 p12
+pl p1 (1)
+pl p12 (1)
