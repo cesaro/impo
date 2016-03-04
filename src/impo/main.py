@@ -4,33 +4,28 @@ Usage:
 impo [OPTIONS] PNMLFILE
 
 where PNMLFILE is the path to a file storing a Time Petri Net in Tina's PNML
-format.
-The delay intervals associated to each transition in PNMLFILE will become the
-reference valuation (unless redefined with the options --v0-*, see below).  The
-OPTIONS placeholder corresponds to zero or more of the following options:
+format.  The delay intervals associated to each transition in PNMLFILE will
+become the reference valuation (unless redefined with option --v0, see below).
+The OPTIONS placeholder corresponds to zero or more of the following options:
 
  --help, -h
    Shows this message.
 
- --par-transition=T,X,Y
+ --param=T,X
+ --param=T,,Y
+ --param=T,X,Y
    Parametrizes transition T, setting parameter X as the earliest firing delay,
-   and Y as the latest firing delay. The option can naturally appear multiples
-   times.
+   and Y as the latest firing delay. X or Y can be ommited.
+   Multiple occurrences are allowed.
 
- --v0-par=X,N
+ --v0 X=N
    Sets the reference valuation for parameter X to N.
+   Multiple occurrences are allowed.
 
- --v0-transition=T,N1,N2
-   Sets the reference valuation for the earliest/latest firing delay parameters
-   of transition T to, respectively, N1 and N2.
-
- --par-transition=T
+ --all-trans-param
    (Not yet implemented)
 
- --par-all-transitions
-   (Not yet implemented)
-
- --k0
+ --k0=CONSTRAINT
    (Not yet implemented)
 
  --no-asserts
@@ -82,9 +77,11 @@ class Main :
     def __init__ (self) :
 
         self.arg_pnmlfile = None        # string
+        self.arg_no_asserts = None      # boolean
         self.arg_param_efd = None       # map from transition names to param names
         self.arg_param_lfd = None       # map from transition names to param names
         self.arg_v0 = None              # map from parameter names to floats
+        self.arg_k0 = None              # map from parameter names to floats
 
         self.net = None                 # the net object
         self.bp = None                  # the unfolding of the net 
@@ -101,151 +98,93 @@ class Main :
 
         self.final_const = None         # final constraint
 
+    def parse_float (self, f) :
+        try :
+            return float (f)
+        except Exception :
+            raise Exception, "`%s': expected number" % f
+
     def parse_cmdline_args (self) :
 
         self.arg_param_efd = {}
         self.arg_param_lfd = {}
         self.arg_v0 = {}
 
-        self.arg_pnmlfile = './benchmarks/fig2.pnml'
-        self.arg_param_lfd['b'] = 'x1'
-        self.arg_param_lfd['c'] = 'x2'
-        self.arg_v0['x1'] = 1
-        self.arg_v0['x2'] = 3.5
+        #self.arg_pnmlfile = './benchmarks/fig2.pnml'
+        #self.arg_param_lfd['b'] = 'x1'
+        #self.arg_param_lfd['c'] = 'x2'
+        #self.arg_v0['x1'] = 1
+        #self.arg_v0['x2'] = 3.5
 
         #self.arg_pnmlfile = './benchmarks/tina/abp.pnml'
         #self.arg_param_efd['t2'] = 'x1'
         #self.arg_param_lfd['t2'] = 'x2'
         #self.arg_param_efd['t3'] = 'x3'
         #self.arg_v0['x1'] = 12
+        #return 
 
-        return
-
-        cmd_choices = [
-                "compare-independence",
-                "extract-dependence",
-                "extract-log",
-                "net-stats",
-                "dump-log",
-                "dump-pes",
-                "dump-bp",
-                "dump-encoding",
-                "dump-merge",
-                "discover",
-                ]
-        eq_choices = [
-                "id",
-                "sp-1place",
-                "sp-pre-singleton",
-                "sp-pre-max",
-                "sp-smt",
-                "sp-smt-post",
-                "ip-smt",
-                "ev-only",
-                ]
-        usage = "pod [OPTION]... CMD {LOG,PNML} [DEPFILE]\n" + \
-                "Try 'pod --help' for more information."
-        p = MyArgumentParser (prog="pod", usage = usage)
+        usage = "impo [OPTION]... PNMLFILE\n" + \
+                "Try 'impo --help' for more information."
+        p = MyArgumentParser (prog="impo", usage = usage)
         #g = p.add_mutually_exclusive_group ()
-        p.add_argument ("--log-truncate", type=int)
-        p.add_argument ("--log-fraction-truncate", type=float)
-        p.add_argument ("--log-unique", action="store_true")
-        p.add_argument ("--log-only")
-        p.add_argument ("--log-negative")
-        p.add_argument ("--log-exclude")
+        p.add_argument ("--param", action="append", default=[])
+        p.add_argument ("--v0", action="append", default=[])
+        p.add_argument ("--k0", default="")
         p.add_argument ("--no-asserts", action="store_true")
-        p.add_argument ("--output")
-        p.add_argument ("--eq", choices=eq_choices, default="id")
-        p.add_argument ("--smt-timeout", type=int, default=60)
-        p.add_argument ("--smt-nr-places", type=int)
-        p.add_argument ("--smt-min-places", type=int)
-        p.add_argument ("--smt-max-places", type=int)
-        p.add_argument ("--smt-pre-distinct", action="store_true")
-        #p.add_argument ("--smt-merge-post", action="store_true")
-        p.add_argument ("--smt-forbid-self", action="store_true")
-        #p.add_argument ("--format", choices=["pdf","dot","pnml"])
+        #p.add_argument ("--output")
 
-        p.add_argument ('cmd', metavar="COMMAND", choices=cmd_choices)
-        p.add_argument ('log_pnml', metavar="LOGFILE/PNML")
-        p.add_argument ('depen', metavar="DEPENFILE", nargs="?", default=None)
+        p.add_argument ('pnmlfile', metavar="PNMLFILE")
 
         args = p.parse_args ()
-        #print "pod: args:", args
+        #print "impo: args:", args
 
-        self.arg_command = args.cmd
-        self.arg_depen_path = args.depen
-        self.arg_eq = args.eq
-        self.arg_log_path = args.log_pnml
-        self.arg_log_trunc = args.log_truncate
-        self.arg_log_trunc_frac = args.log_fraction_truncate
-        self.arg_log_unique = args.log_unique
-        self.arg_log_negative = args.log_negative
-        self.arg_smt_timeout = args.smt_timeout
-        self.arg_smt_pre_distinct = args.smt_pre_distinct
-        #self.arg_smt_merge_post = args.smt_merge_post
-        self.arg_smt_forbid_self = args.smt_forbid_self
+        self.arg_pnmlfile = args.pnmlfile
         self.arg_no_asserts = args.no_asserts
+        self.arg_k0 = args.k0
 
-        # nr-places translates to min-places and max-places
-        if args.smt_nr_places != None :
-            self.arg_smt_min_places = args.smt_nr_places
-            self.arg_smt_max_places = args.smt_nr_places
-        else :
-            self.arg_smt_min_places = args.smt_min_places
-            self.arg_smt_max_places = args.smt_max_places
+        for s in args.param :
+            l = s.split (',')
+            if len (l) == 2 :
+                self.arg_param_efd[l[0]] = l[1]
+            elif len (l) == 3 :
+                if len (l[1]) :
+                    self.arg_param_efd[l[0]] = l[1]
+                if len (l[2]) :
+                    self.arg_param_lfd[l[0]] = l[2]
+            else :
+                raise Exception, \
+                        "`%s': expected format 'T,X,Y'" % s
 
-        # at most one of log-trunc and log-trunc-frac
-        if self.arg_log_trunc_frac != None and self.arg_log_trunc != None :
-                raise Exception, "At most one of --log-truncate and --log-fraction-truncate"
-
-        if self.arg_command not in \
-            ["extract-dependence", "dump-log", "net-stats", "extract-log"] :
-            if self.arg_depen_path == None :
-                raise Exception, "Missing argument: expected path to a dependence file"
-
-        if args.log_only != None :
-            try :
-                self.arg_log_only = [int (x) for x in args.log_only.split (",")]
-            except Exception :
-                raise Exception, "'%s': expected a comma-separated list of numbers" % (args.log_only)
-        if args.log_exclude != None :
-            try :
-                self.arg_log_exclude = [int (x) for x in args.log_exclude.split (",")]
-            except Exception :
-                raise Exception, "'%s': expected a comma-separated list of numbers" % (args.log_exclude)
-
-        if args.output != None :
-            self.arg_output_path = args.output
-        else :
-            d = {
-                "extract-dependence" : "dependence.txt",
-                "extract-log"        : "log.xes",
-                "dump-pes"           : "pes.dot",
-                "dump-bp"            : "bp.pdf",
-                "dump-encoding"      : "encoding.smt2",
-                "discover"           : "output.pnml"}
-            self.arg_output_path = d.get (self.arg_command, "output.txt")
+        for s in args.v0 :
+            l = s.split ('=')
+            if len (l) == 2 :
+                self.arg_v0[l[0]] = self.parse_float (l[1])
+            #elif len (l) == 3 :
+            #    low = self.parse_float (l[1])
+            #    high = self.parse_float (l[2])
+            #    # lookup parameters of transition l[0]
+            #    try :
+            #        self.arg_v0[self.arg_param_efd[l[0]]] = low
+            #    except KeyError :
+            #        raise Exception, \
+            #                "`%s': transition '%s' has non-parametric lower bound" % (s, l[0])
+            #    try :
+            #        self.arg_v0[self.arg_param_lfd[l[0]]] = high
+            #    except KeyError :
+            #        raise Exception, \
+            #                "`%s': transition has non-parametric upper bound" % s
+            else :
+                raise Exception, \
+                        "`%s': expected format X=N" % s
         for opt in [
-                    "arg_command",
-                    "arg_depen_path",
+                    "arg_pnmlfile",
+                    "arg_param_efd",
+                    "arg_param_lfd",
+                    "arg_v0",
+                    "arg_k0",
                     "arg_no_asserts",
-                    "arg_log_path",
-                    "arg_log_trunc",
-                    "arg_log_trunc_frac",
-                    "arg_log_only",
-                    "arg_log_exclude",
-                    "arg_log_negative",
-                    "arg_log_unique",
-                    "arg_smt_timeout",
-                    "arg_smt_pre_distinct",
-                    #"arg_smt_merge_post",
-                    "arg_smt_forbid_self",
-                    "arg_smt_min_places",
-                    "arg_smt_max_places",
-                    "arg_eq",
-                    "arg_output_path",
                     ] :
-            output_pair (sys.stdout, opt, self.__dict__[opt], 20, "pod: ")
+            output_pair (sys.stdout, opt, self.__dict__[opt], 20, "impo: ")
 
     def main (self) :
 
@@ -258,6 +197,11 @@ class Main :
 
         # setup v0, lower and upper bounds (efd, lfd), and k0
         self.setup_params_v0_k0 ()
+
+        if len (self.v0) == 0 :
+            print "impo: WARNING: no parametric delays ha been defined"
+            print "impo: nothing to do, terminating"
+            return
 
         # unfold with cunf
         self.export_and_unfold ()
@@ -412,6 +356,8 @@ class Main :
         # so
         print 'impo: setting up initial constraint k0'
         self.k0const = 'and (\n'
+        if len (self.arg_k0) :
+            self.k0const += ' ' + self.arg_k0 + ',\n'
         for t in self.net.trans :
             if isinstance (self.efd[t], Param) or isinstance (self.lfd[t], Param) :
                 self.k0const += ' %s <= %s, (* transition %s *)\n' % \
