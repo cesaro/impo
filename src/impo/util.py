@@ -79,7 +79,7 @@ def load_bp (path, prefix='impo') :
     return bp
 
 def runit (args, timeout=-1, sh=False, prefix='impo: ') :
-    #print prefix, 'cmd:', args, 'timeout', timeout
+    print prefix, 'cmd:', args, 'timeout', timeout
     try :
         p = subprocess.Popen (args, bufsize=8192, stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
@@ -120,12 +120,12 @@ def runit (args, timeout=-1, sh=False, prefix='impo: ') :
         p.wait ()
         raise
 
-def polyop (query, prefix='impo: ') :
+def polyop (query, prefix='impo: ', unlink=True) :
     inpath = None
     outpath = None
     try :
         # save the query into temp file
-        fd, inpath = tempfile.mkstemp (suffix='.polyop')
+        fd, inpath = tempfile.mkstemp (suffix='.pop.ml')
         f = os.fdopen (fd, 'w')
         f.write (query)
         f.close ()
@@ -143,9 +143,10 @@ def polyop (query, prefix='impo: ') :
         with open (outpath) as f : res = f.read ()
 
     finally :
-        # remove temporary files
-        if inpath != None : os.unlink (inpath)
-        if outpath != None : os.unlink (outpath)
+        # remove temporary files, unless disabled by user
+        if unlink :
+            if inpath != None : os.unlink (inpath)
+            if outpath != None : os.unlink (outpath)
 
     # strip and return
     return res.strip (' \t\n')
@@ -165,7 +166,7 @@ def avg_iter (it) :
         i += 1
     return float (s) / i
 
-def long_list (ls, maxlen=5) :
+def long_list (ls, maxlen=10) :
     ls = list (ls)
     le = len (ls)
     if maxlen < 0 : maxlen = le

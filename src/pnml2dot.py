@@ -4,7 +4,7 @@ import sys
 import ptnet
 
 if __name__ == '__main__' :
-    n = ptnet.Net (True)
+    n = ptnet.net.Net (True)
     n.read (sys.stdin, 'pnml')
     n.write (sys.stdout, 'dot')
 

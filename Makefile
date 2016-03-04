@@ -5,7 +5,8 @@ include defs.mk
 
 all:
 	#-./src/impo.py --help
-	-./src/impo.py benchmarks/fig2.pnml 
+	#-./src/impo.py benchmarks/own/fig2.pnml 
+	benchmarks/run.sh
 
 tags : $(SRCS)
 	ctags -R src/

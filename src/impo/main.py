@@ -31,6 +31,9 @@ The OPTIONS placeholder corresponds to zero or more of the following options:
  --no-asserts
    Disables defensive programming verifications.
 
+ --no-unlink
+   Do not remove temporary generated files (for debugging purposes).
+
  --output=OUTPUTPATH
    Save the output of the command to OUTPUTPATH
    (Not yet implemented)
@@ -78,6 +81,7 @@ class Main :
 
         self.arg_pnmlfile = None        # string
         self.arg_no_asserts = None      # boolean
+        self.arg_no_unlink = None       # boolean
         self.arg_all_trans_param = None # boolean
         self.arg_param_efd = None       # map from transition names to param names
         self.arg_param_lfd = None       # map from transition names to param names
@@ -132,6 +136,7 @@ class Main :
         p.add_argument ("--v0", action="append", default=[])
         p.add_argument ("--k0", default="")
         p.add_argument ("--no-asserts", action="store_true")
+        p.add_argument ("--no-unlink", action="store_true")
         p.add_argument ("--all-trans-param", action="store_true")
         #p.add_argument ("--output")
 
@@ -142,6 +147,7 @@ class Main :
 
         self.arg_pnmlfile = args.pnmlfile
         self.arg_no_asserts = args.no_asserts
+        self.arg_no_unlink = args.no_unlink
         self.arg_k0 = args.k0
         self.arg_all_trans_param = args.all_trans_param
 
@@ -186,6 +192,7 @@ class Main :
                     "arg_v0",
                     "arg_k0",
                     "arg_no_asserts",
+                    "arg_no_unlink",
                     "arg_all_trans_param",
                     ] :
             output_pair (sys.stdout, opt, self.__dict__[opt], 20, "impo: ")
@@ -241,15 +248,17 @@ class Main :
             print 'impo: con > eq:   cex', long_list (c.cex ())
             self.assert_is_max_conf (c)
 
-            const = ConfigConst (c, self.efd, self.lfd, self.v0const)
+            const = ConfigConst (c, self.efd, self.lfd, not self.arg_no_unlink)
             const.generate ()
+
+            #print const.const
 
             #print 'impo: con > eq: existential quantification of clock/doe/dod vars'
             print 'impo: con > eq: existential quantification'
             const2 = const.hide ()
 
             print 'impo: con > eq: checking whether v0 compatible'
-            if const2.does_include_v0 () :
+            if const2.does_include_v0 (self.v0const) :
                 print 'impo: con > eq: v0-compatible, skipping'
                 continue
 
@@ -289,7 +298,7 @@ class Main :
 
         # simplify with polyop
         print 'impo: simplifying conjunction of negated constraints'
-        output = polyop (query, 'impo:  ')
+        output = polyop (query, 'impo:  ', unlink= not self.arg_no_unlink)
         print 'impo:   query:', long_str (repr (query))
         print 'impo:   result:', long_str (repr (output))
         output = polyop_replace_ors (output)
@@ -443,7 +452,7 @@ class Main :
             cmd.append ('--stats')
             cmd.append ('--cutoff=none')
             cmd.append ('--max-events=30')
-            print 'impo: net > unf: cmd', cmd
+            #print 'impo: net > unf: cmd', cmd
             exitcode, out = runit (cmd, prefix='impo: net > unf: ')
             if exitcode != 0 :
                 raise Exception, 'cunf unfolder: exit code %d, output: "%s"' % (exitcode, out)
@@ -454,9 +463,10 @@ class Main :
             self.bp = load_bp (cufpath, 'impo: net > cuf')
 
         finally :
-            # remove temporary files
-            if netpath != None : os.unlink (netpath)
-            if cufpath != None : os.unlink (cufpath)
+            # remove temporary files, unless disabled by user
+            if not self.arg_no_unlink :
+                if netpath != None : os.unlink (netpath)
+                if cufpath != None : os.unlink (cufpath)
 
 class Param :
     def __init__ (self, name) :
@@ -485,14 +495,14 @@ class Var (str) :
     pass
 
 class ConfigConst :
-    def __init__ (self, c, efd, lfd, v0const) :
+    def __init__ (self, c, efd, lfd, unlink=True) :
         self.c = c          # the configuration
         self.const = ""      # the constraint
         self.__tab = {}     # map from objects to Vars (only for vars that are not params)
         self.hidevars = []  # range of the __tab map (seen as a function)
         self.efd = efd
         self.lfd = lfd
-        self.v0const = v0const
+        self.unlink = unlink
 
     def getvar (self, obj) :
         try :
@@ -507,13 +517,13 @@ class ConfigConst :
             self.hidevars.append (v)
             return v
 
-    def does_include_v0 (self) :
+    def does_include_v0 (self, v0const) :
         # polyop gives correct result only if we have no variables to hide (ask Etienne)
         if len (self.hidevars) :
             raise Exception, 'Internal error: v0 inclusion checking bug'
-        query = 'included %s in %s' % (self.v0const, self.const)
+        query = 'included %s in %s' % (v0const, self.const)
 
-        output = polyop (query, 'impo: con > eq:  ')
+        output = polyop (query, 'impo: con > eq:  ', unlink=self.unlink)
         print 'impo: con > eq:   query:', repr (query)
         print 'impo: con > eq:   result:', repr (output)
         return output == 'yes'
@@ -527,7 +537,7 @@ class ConfigConst :
         query += ', '.join (str (v) for v in self.hidevars)
         query += ') in ' + self.const
 
-        output = polyop (query, 'impo: con > eq:  ')
+        output = polyop (query, 'impo: con > eq:  ', unlink=self.unlink)
         print 'impo: con > eq:   query:', long_str (repr (query))
         print 'impo: con > eq:   result:', long_str (repr (output))
         output = polyop_replace_ors (output)
@@ -537,13 +547,13 @@ class ConfigConst :
             raise Exception, "Internal error: polyop returned `error' result file"
 
         # build a new constraint and return it
-        c = ConfigConst (self.c, self.efd, self.lfd, self.v0const)
+        c = ConfigConst (self.c, self.efd, self.lfd, self.unlink)
         c.const = polyop_replace_ors (output)
         return c
 
     def negate (self) :
         query = 'simplify not (%s)' % self.const
-        output = polyop (query, 'impo: con > eq:  ')
+        output = polyop (query, 'impo: con > eq:  ', unlink=self.unlink)
         print 'impo: con > eq:   query:', long_str (repr (query))
         print 'impo: con > eq:   result:', long_str (repr (output))
         output = polyop_replace_ors (output)
@@ -553,7 +563,7 @@ class ConfigConst :
             raise Exception, "Internal error: polyop returned `error' result file"
 
         # build a new constraint and return it
-        c = ConfigConst (self.c, self.efd, self.lfd, self.v0const)
+        c = ConfigConst (self.c, self.efd, self.lfd, self.unlink)
         c.const = output
         return c
 
