@@ -48,7 +48,16 @@ class Configuration :
 
     def cex (self) :
         s = set ()
-        # trivial algorithm
+
+        # trivial algorithm, minimal events not in the configuration and not
+        # enabled
+        for e in self.pes.minimal :
+            if e in self.events : continue
+            if e not in self.__en :
+                s.add (e)
+
+        # non-minimal events having all predecessors in the configuration and
+        # not enabled
         for e in self.events :
             for ep in e.post :
                 if ep in self.events : continue
