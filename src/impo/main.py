@@ -287,7 +287,7 @@ class Main :
         print
 
         print 'Generated constraint:'
-        print self.final_const
+        print polyop_pretty_format (self.final_const)
         print
 
     def compute_final_constraint (self, l) :
@@ -380,10 +380,14 @@ class Main :
         self.k0const = 'and (\n'
         if len (self.arg_k0) :
             self.k0const += ' ' + self.arg_k0 + ',\n'
+        lowp = set ()
         for t in self.net.trans :
             if isinstance (self.efd[t], Param) or isinstance (self.lfd[t], Param) :
                 self.k0const += ' %s <= %s, (* transition %s *)\n' % \
                         (str (self.efd[t]), str (self.lfd[t]), t.name)
+            if isinstance (self.efd[t], Param) : lowp.add (self.efd[t])
+        for p in lowp :
+            self.k0const += ' 0 <= %s,\n' % str (p)
         self.k0const += ')\n'
 
         # build v0const
@@ -403,9 +407,12 @@ class Main :
                 high = self.v0[self.lfd[t]]
             else :
                 high = self.lfd[t]
+            if low < 0 :
+                s = "error: v0 sets parameter `%s' lower than zero" % self.efd[t]
+                raise Exception, s
             if low > high :
-                s = "error: v0 does not imply k0: "
-                s += "transition '%s': `%s <= %s' does not hold" % \
+                s = "error: v0 is not contained in k0: "
+                s += "transition '%s': `%s <= %s' does not hold on v0" % \
                         (t.name, self.efd[t], self.lfd[t])
                 raise Exception, s
 
@@ -613,7 +620,14 @@ class ConfigConst :
     def __gen_doe (self, e) :
         self.const += " (* doe(%s) = max %s *)\n" % (repr (e), list (e.pre))
         v = self.getvar ('doe_e%d' % e.nr)
-        self.__gen_max_const_eq ([self.getvar (ep) for ep in e.pre], v)
+
+        # if event initially enabled, then doe = 0; if not, the max expression
+        # will correctly constraint it
+        if len (e.pre) == 0 :
+            self.const += ' %s = 0,\n' % str (v)
+        else :
+            self.__gen_max_const_eq ([self.getvar (ep) for ep in e.pre], v)
+
         self.const += "\n"
         return v
 

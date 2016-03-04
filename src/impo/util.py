@@ -158,6 +158,16 @@ def polyop_replace_ors (const) :
         if l[i] == 'OR' : l[i] = 'or'
     return ' '.join (l)
 
+def polyop_pretty_format (const) :
+    l = const.split ()
+    #print l
+    if len (l) <= 2 : return const
+    l[0] = '  ' + l[0]
+    for i in range (len (l)) :
+        if l[i] == '&' : l[i] = '\n&'
+        if l[i] == 'or' : l[i] = '\n\nor\n\n'
+    return ' '.join (l)
+
 def avg_iter (it) :
     s = 0
     i = 0
