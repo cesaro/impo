@@ -165,7 +165,7 @@ def polyop_pretty_format (const) :
     l[0] = '  ' + l[0]
     for i in range (len (l)) :
         if l[i] == '&' : l[i] = '\n&'
-        if l[i] == 'or' : l[i] = '\n\nor\n\n'
+        if l[i] == 'or' : l[i] = '\n\nor\n\n '
     return ' '.join (l)
 
 def avg_iter (it) :

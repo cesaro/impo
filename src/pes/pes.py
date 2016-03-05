@@ -26,6 +26,27 @@ def bp_to_pes (bp) :
     p.update_minimal ()
     return p
 
+def pes_to_ct (pes) :
+    # transforms a PES into its computation tree
+    c = Configuration (pes)
+    p2 = PES ()
+    __pes_to_ct_rec (pes, p2, c, None)
+    return p2
+
+def __pes_to_ct_rec (p1, p2, c1, e2) :
+
+    # for every event enabled at c1, we create a new causal successor of e2, we
+    # set it in conflict with its sibling events, and we recursively continue :)
+    cfl = []
+    for e in c1.enabled () :
+        ep = p2.add_event (e.label, [e2] if e2 != None else [], cfl)
+        if e2 == None : p2.update_minimal_hint (ep)
+        c = c1.clone ()
+        assert e in c.enabled ()
+        c.add (e)
+        __pes_to_ct_rec (p1, p2, c, ep)
+        cfl.append (ep)
+
 class Event :
     def __init__ (self, nr, label) :
         self.pre = set ()

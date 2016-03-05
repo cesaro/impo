@@ -97,6 +97,8 @@ def test3 () :
         print ' e', e
     p.write (sys.stdout, 'dot')
 
+    return
+
     print '0 < 1 ?', p.in_caus (p.events[0], p.events[1])
     print '1 < 0 ?', p.in_caus (p.events[1], p.events[0])
     print '0 < 5 ?', p.in_caus (p.events[0], p.events[5])
@@ -336,6 +338,26 @@ def test11 () :
     print size_human (1024 * 1024 * 1026)
     print size_human (1024 * 1024 * 8026)
     print size_human (1024 * 1024 * 8026 * 1024)
+
+def test12 () :
+    u = ptnet.unfolding.Unfolding (True)
+    #f = open ('ex.cuf', 'r') # see generate_ex
+    f = open ('ex.cuf', 'r')
+    u.read (f)
+    p = pes.bp_to_pes (u)
+
+    print 'pes'
+    print p
+    for e in p.events :
+        print ' e', e
+    f = open ('out.dot', 'w') # see generate_ex
+    p.write (sys.stdout, 'dot')
+    p.write (open ('ex.dot', 'w'), 'dot')
+
+    p2 = pes.pes_to_ct (p)
+
+    p2.write (open ('out.dot', 'w'), 'dot')
+    p2.write (sys.stdout, 'dot')
 
 
 # vi:ts=4:sw=4:et:
