@@ -3,7 +3,7 @@
 
 net app13fig3a
 
-tr t1 [0, 1] A -> A
-tr t2 [0, 1] B -> C
+tr t1 [0,0] A -> A
+tr t2 [0,0] B -> C
 pl A (1)
 pl B (1)

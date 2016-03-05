@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pnml xmlns="http://www.pnml.org/version-2009/grammar/pnml">
+ <net id="n-792D-1FF55-0" type ="http://www.laas.fr/tina/tpn">
+  <name>
+   <text>app13fig3b</text>
+  </name>
+ <page id="g-792D-1FFFA-1">
+  <place id="p-792D-20077-2">
+  <name>
+   <text>A</text>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+  </place>
+  <place id="p-792D-200EB-3">
+  <name>
+   <text>B</text>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+  </place>
+  <place id="p-792D-200F4-4">
+  <name>
+   <text>C</text>
+  </name>
+  </place>
+  <place id="p-792D-200FC-5">
+  <name>
+   <text>D</text>
+  </name>
+  </place>
+  <place id="p-792D-20103-6">
+  <name>
+   <text>E</text>
+  </name>
+  </place>
+  <transition id="t-792D-2010A-7">
+  <name>
+   <text>t1</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>5</cn>
+     <cn>6</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-792D-20143-8">
+  <name>
+   <text>t2</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>1</cn>
+     <cn>3</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-792D-2014D-9">
+  <name>
+   <text>t3</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>2</cn>
+     <cn>4</cn>
+    </interval>
+   </delay>
+  </transition>
+  <arc id="e-792D-20196-10" source="p-792D-20077-2" target="t-792D-2010A-7">
+  </arc>
+  <arc id="e-792D-201B5-11" source="t-792D-2010A-7" target="p-792D-200F4-4">
+  </arc>
+  <arc id="e-792D-201BD-12" source="p-792D-20077-2" target="t-792D-20143-8">
+  </arc>
+  <arc id="e-792D-201C4-13" source="p-792D-200EB-3" target="t-792D-20143-8">
+  </arc>
+  <arc id="e-792D-201CA-14" source="t-792D-20143-8" target="p-792D-200FC-5">
+  </arc>
+  <arc id="e-792D-201D1-15" source="p-792D-200EB-3" target="t-792D-2014D-9">
+  </arc>
+  <arc id="e-792D-201D8-16" source="t-792D-2014D-9" target="p-792D-20103-6">
+  </arc>
+ </page>
+ </net>
+</pnml>

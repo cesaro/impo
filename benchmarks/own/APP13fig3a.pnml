@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pnml xmlns="http://www.pnml.org/version-2009/grammar/pnml">
+ <net id="n-7A32-8BC7E-0" type ="http://www.laas.fr/tina/tpn">
+  <name>
+   <text>app13fig3a</text>
+  </name>
+ <page id="g-7A32-8BCDE-1">
+  <place id="p-7A32-8BD36-2">
+  <name>
+   <text>A</text>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+  </place>
+  <place id="p-7A32-8BD91-3">
+  <name>
+   <text>B</text>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+  </place>
+  <place id="p-7A32-8BD98-4">
+  <name>
+   <text>C</text>
+  </name>
+  </place>
+  <transition id="t-7A32-8BD9F-5">
+  <name>
+   <text>t1</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>0</cn>
+     <cn>0</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-7A32-8BDBE-6">
+  <name>
+   <text>t2</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>0</cn>
+     <cn>0</cn>
+    </interval>
+   </delay>
+  </transition>
+  <arc id="e-7A32-8BDFE-7" source="p-7A32-8BD36-2" target="t-7A32-8BD9F-5">
+  </arc>
+  <arc id="e-7A32-8BE19-8" source="t-7A32-8BD9F-5" target="p-7A32-8BD36-2">
+  </arc>
+  <arc id="e-7A32-8BE20-9" source="p-7A32-8BD91-3" target="t-7A32-8BDBE-6">
+  </arc>
+  <arc id="e-7A32-8BE25-10" source="t-7A32-8BDBE-6" target="p-7A32-8BD98-4">
+  </arc>
+ </page>
+ </net>
+</pnml>

@@ -37,11 +37,11 @@ The OPTIONS placeholder corresponds to zero or more of the following options:
 
  --seq-semantics
    By default impo explores all maximal configurations (concurrent executions)
-   of the unfolding (concurrent semantics) of the net. With this option, it will
-   explore construct the computation tree of the net and explore the maximal
-   executions (sequential branches) of that tree, instead of the
+   of the unfolding (concurrent semantics) of the net. When this option is
+   given, it will construct the computation tree of the net and explore the
+   maximal executions (sequential branches) of that tree, instead of the
    (partially-ordered) configurations.  This is very similar to what the Inverse
-   Method (as implemented in Imitator) does.
+   Method does (as implemented in the tool Imitator).
 
  --max-events=N
    Instructs impo to bound the number of events in the untimed unfolding to N.
@@ -241,7 +241,7 @@ class Main :
         self.setup_params_v0_k0 ()
 
         if len (self.v0) == 0 :
-            print "impo: WARNING: no parametric delays ha been defined"
+            print "impo: WARNING: no parametric delays have been defined"
             print "impo: nothing to do, terminating"
             return
 
