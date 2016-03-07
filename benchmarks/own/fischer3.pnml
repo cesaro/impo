@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pnml xmlns="http://www.pnml.org/version-2009/grammar/pnml">
+<net id="n1" type="http://www.laas.fr/tina/tpn">
+<name> <text>"" version "", by ""</text> </name>
+<page id="page">
+
+<!-- places -->
+<place id="p0">
+<name><text>p1_l0</text></name>
+<initialMarking><text>1</text></initialMarking>
+</place>
+<place id="p1">
+<name><text>p2_l0</text></name>
+<initialMarking><text>1</text></initialMarking>
+</place>
+<place id="p2">
+<name><text>p3_l0</text></name>
+<initialMarking><text>1</text></initialMarking>
+</place>
+<place id="p3">
+<name><text>id=0</text></name>
+<initialMarking><text>1</text></initialMarking>
+</place>
+<place id="p4">
+<name><text>id=1</text></name>
+<initialMarking><text>0</text></initialMarking>
+</place>
+<place id="p5">
+<name><text>id=2</text></name>
+<initialMarking><text>0</text></initialMarking>
+</place>
+<place id="p6">
+<name><text>id=3</text></name>
+<initialMarking><text>0</text></initialMarking>
+</place>
+<place id="p7">
+<name><text>p1_l5</text></name>
+<initialMarking><text>0</text></initialMarking>
+</place>
+<place id="p8">
+<name><text>p2_l5</text></name>
+<initialMarking><text>0</text></initialMarking>
+</place>
+<place id="p9">
+<name><text>p3_l5</text></name>
+<initialMarking><text>0</text></initialMarking>
+</place>
+<place id="p10">
+<name><text>p1_l1</text></name>
+<initialMarking><text>0</text></initialMarking>
+</place>
+<place id="p11">
+<name><text>p2_l1</text></name>
+<initialMarking><text>0</text></initialMarking>
+</place>
+<place id="p12">
+<name><text>p3_l1</text></name>
+<initialMarking><text>0</text></initialMarking>
+</place>
+<place id="p13">
+<name><text>p1_l2</text></name>
+<initialMarking><text>0</text></initialMarking>
+</place>
+<place id="p14">
+<name><text>p2_l2</text></name>
+<initialMarking><text>0</text></initialMarking>
+</place>
+<place id="p15">
+<name><text>p3_l2</text></name>
+<initialMarking><text>0</text></initialMarking>
+</place>
+<place id="p16">
+<name><text>p1_l3</text></name>
+<initialMarking><text>0</text></initialMarking>
+</place>
+<place id="p17">
+<name><text>p2_l3</text></name>
+<initialMarking><text>0</text></initialMarking>
+</place>
+<place id="p18">
+<name><text>p3_l3</text></name>
+<initialMarking><text>0</text></initialMarking>
+</place>
+<place id="p19">
+<name><text>p1_l4</text></name>
+<initialMarking><text>0</text></initialMarking>
+</place>
+<place id="p20">
+<name><text>p2_l4</text></name>
+<initialMarking><text>0</text></initialMarking>
+</place>
+<place id="p21">
+<name><text>p3_l4</text></name>
+<initialMarking><text>0</text></initialMarking>
+</place>
+
+<!-- transitions -->
+<transition id="t22">
+<name><text>p1_if_id=0</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>1.0</cn></interval>
+</delay>
+</transition>
+<transition id="t23">
+<name><text>p2_if_id=0</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>1.0</cn></interval>
+</delay>
+</transition>
+<transition id="t24">
+<name><text>p3_if_id=0</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>1.0</cn></interval>
+</delay>
+</transition>
+<transition id="t25">
+<name><text>p1_setid0</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>1.0</cn></interval>
+</delay>
+</transition>
+<transition id="t26">
+<name><text>p1_setid1</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>1.0</cn></interval>
+</delay>
+</transition>
+<transition id="t27">
+<name><text>p1_setid2</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>1.0</cn></interval>
+</delay>
+</transition>
+<transition id="t28">
+<name><text>p1_setid3</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>1.0</cn></interval>
+</delay>
+</transition>
+<transition id="t29">
+<name><text>p2_setid0</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>1.0</cn></interval>
+</delay>
+</transition>
+<transition id="t30">
+<name><text>p2_setid1</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>1.0</cn></interval>
+</delay>
+</transition>
+<transition id="t31">
+<name><text>p2_setid2</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>1.0</cn></interval>
+</delay>
+</transition>
+<transition id="t32">
+<name><text>p2_setid3</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>1.0</cn></interval>
+</delay>
+</transition>
+<transition id="t33">
+<name><text>p3_setid0</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>1.0</cn></interval>
+</delay>
+</transition>
+<transition id="t34">
+<name><text>p3_setid1</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>1.0</cn></interval>
+</delay>
+</transition>
+<transition id="t35">
+<name><text>p3_setid2</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>1.0</cn></interval>
+</delay>
+</transition>
+<transition id="t36">
+<name><text>p3_setid3</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>1.0</cn></interval>
+</delay>
+</transition>
+<transition id="t37">
+<name><text>p1_pause</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>10.0</cn><cn>10.0</cn></interval>
+</delay>
+</transition>
+<transition id="t38">
+<name><text>p2_pause</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>10.0</cn><cn>10.0</cn></interval>
+</delay>
+</transition>
+<transition id="t39">
+<name><text>p3_pause</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>10.0</cn><cn>10.0</cn></interval>
+</delay>
+</transition>
+<transition id="t40">
+<name><text>p1_ifidne0</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>0.0</cn></interval>
+</delay>
+</transition>
+<transition id="t41">
+<name><text>p1_ifideq</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>0.0</cn></interval>
+</delay>
+</transition>
+<transition id="t42">
+<name><text>p1_ifidne2</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>0.0</cn></interval>
+</delay>
+</transition>
+<transition id="t43">
+<name><text>p1_ifidne3</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>0.0</cn></interval>
+</delay>
+</transition>
+<transition id="t44">
+<name><text>p2_ifidne0</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>0.0</cn></interval>
+</delay>
+</transition>
+<transition id="t45">
+<name><text>p2_ifidne1</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>0.0</cn></interval>
+</delay>
+</transition>
+<transition id="t46">
+<name><text>p2_ifideq</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>0.0</cn></interval>
+</delay>
+</transition>
+<transition id="t47">
+<name><text>p2_ifidne3</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>0.0</cn></interval>
+</delay>
+</transition>
+<transition id="t48">
+<name><text>p3_ifidne0</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>0.0</cn></interval>
+</delay>
+</transition>
+<transition id="t49">
+<name><text>p3_ifidne1</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>0.0</cn></interval>
+</delay>
+</transition>
+<transition id="t50">
+<name><text>p3_ifidne2</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>0.0</cn></interval>
+</delay>
+</transition>
+<transition id="t51">
+<name><text>p3_ifideq</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>0.0</cn></interval>
+</delay>
+</transition>
+<transition id="t52">
+<name><text>p1_exit0</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>3.0</cn></interval>
+</delay>
+</transition>
+<transition id="t53">
+<name><text>p1_exit1</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>3.0</cn></interval>
+</delay>
+</transition>
+<transition id="t54">
+<name><text>p1_exit2</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>3.0</cn></interval>
+</delay>
+</transition>
+<transition id="t55">
+<name><text>p1_exit3</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>3.0</cn></interval>
+</delay>
+</transition>
+<transition id="t56">
+<name><text>p2_exit0</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>3.0</cn></interval>
+</delay>
+</transition>
+<transition id="t57">
+<name><text>p2_exit1</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>3.0</cn></interval>
+</delay>
+</transition>
+<transition id="t58">
+<name><text>p2_exit2</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>3.0</cn></interval>
+</delay>
+</transition>
+<transition id="t59">
+<name><text>p2_exit3</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>3.0</cn></interval>
+</delay>
+</transition>
+<transition id="t60">
+<name><text>p3_exit0</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>3.0</cn></interval>
+</delay>
+</transition>
+<transition id="t61">
+<name><text>p3_exit1</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>3.0</cn></interval>
+</delay>
+</transition>
+<transition id="t62">
+<name><text>p3_exit2</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>3.0</cn></interval>
+</delay>
+</transition>
+<transition id="t63">
+<name><text>p3_exit3</text></name>
+<delay>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>3.0</cn></interval>
+</delay>
+</transition>
+
+<!-- flow relation -->
+<arc id="a64" source="t40" target="p0" />
+<arc id="a65" source="t42" target="p0" />
+<arc id="a66" source="t43" target="p0" />
+<arc id="a67" source="p0" target="t22" />
+<arc id="a68" source="t47" target="p1" />
+<arc id="a69" source="t44" target="p1" />
+<arc id="a70" source="t45" target="p1" />
+<arc id="a71" source="p1" target="t23" />
+<arc id="a72" source="t50" target="p2" />
+<arc id="a73" source="t48" target="p2" />
+<arc id="a74" source="t49" target="p2" />
+<arc id="a75" source="p2" target="t24" />
+<arc id="a76" source="t60" target="p3" />
+<arc id="a77" source="t53" target="p3" />
+<arc id="a78" source="t57" target="p3" />
+<arc id="a79" source="t61" target="p3" />
+<arc id="a80" source="t54" target="p3" />
+<arc id="a81" source="t58" target="p3" />
+<arc id="a82" source="t62" target="p3" />
+<arc id="a83" source="t55" target="p3" />
+<arc id="a84" source="t59" target="p3" />
+<arc id="a85" source="t52" target="p3" />
+<arc id="a86" source="t63" target="p3" />
+<arc id="a87" source="t56" target="p3" />
+<arc id="a88" source="p3" target="t60" />
+<arc id="a89" source="p3" target="t29" />
+<arc id="a90" source="p3" target="t33" />
+<arc id="a91" source="p3" target="t25" />
+<arc id="a92" source="p3" target="t52" />
+<arc id="a93" source="p3" target="t56" />
+<!-- read arc: -->
+ <arc id="ra94" source="p3" target="t24" />
+ <arc id="ra95" source="t24" target="p3" />
+<!-- read arc: -->
+ <arc id="ra96" source="p3" target="t44" />
+ <arc id="ra97" source="t44" target="p3" />
+<!-- read arc: -->
+ <arc id="ra98" source="p3" target="t22" />
+ <arc id="ra99" source="t22" target="p3" />
+<!-- read arc: -->
+ <arc id="ra100" source="p3" target="t48" />
+ <arc id="ra101" source="t48" target="p3" />
+<!-- read arc: -->
+ <arc id="ra102" source="p3" target="t23" />
+ <arc id="ra103" source="t23" target="p3" />
+<!-- read arc: -->
+ <arc id="ra104" source="p3" target="t40" />
+ <arc id="ra105" source="t40" target="p3" />
+<arc id="a106" source="t25" target="p4" />
+<arc id="a107" source="t26" target="p4" />
+<arc id="a108" source="t27" target="p4" />
+<arc id="a109" source="t28" target="p4" />
+<arc id="a110" source="p4" target="t26" />
+<arc id="a111" source="p4" target="t53" />
+<arc id="a112" source="p4" target="t57" />
+<arc id="a113" source="p4" target="t61" />
+<arc id="a114" source="p4" target="t30" />
+<arc id="a115" source="p4" target="t34" />
+<!-- read arc: -->
+ <arc id="ra116" source="p4" target="t41" />
+ <arc id="ra117" source="t41" target="p4" />
+<!-- read arc: -->
+ <arc id="ra118" source="p4" target="t49" />
+ <arc id="ra119" source="t49" target="p4" />
+<!-- read arc: -->
+ <arc id="ra120" source="p4" target="t45" />
+ <arc id="ra121" source="t45" target="p4" />
+<arc id="a122" source="t29" target="p5" />
+<arc id="a123" source="t30" target="p5" />
+<arc id="a124" source="t31" target="p5" />
+<arc id="a125" source="t32" target="p5" />
+<arc id="a126" source="p5" target="t35" />
+<arc id="a127" source="p5" target="t27" />
+<arc id="a128" source="p5" target="t54" />
+<arc id="a129" source="p5" target="t58" />
+<arc id="a130" source="p5" target="t62" />
+<arc id="a131" source="p5" target="t31" />
+<!-- read arc: -->
+ <arc id="ra132" source="p5" target="t46" />
+ <arc id="ra133" source="t46" target="p5" />
+<!-- read arc: -->
+ <arc id="ra134" source="p5" target="t50" />
+ <arc id="ra135" source="t50" target="p5" />
+<!-- read arc: -->
+ <arc id="ra136" source="p5" target="t42" />
+ <arc id="ra137" source="t42" target="p5" />
+<arc id="a138" source="t35" target="p6" />
+<arc id="a139" source="t36" target="p6" />
+<arc id="a140" source="t33" target="p6" />
+<arc id="a141" source="t34" target="p6" />
+<arc id="a142" source="p6" target="t32" />
+<arc id="a143" source="p6" target="t36" />
+<arc id="a144" source="p6" target="t28" />
+<arc id="a145" source="p6" target="t55" />
+<arc id="a146" source="p6" target="t59" />
+<arc id="a147" source="p6" target="t63" />
+<!-- read arc: -->
+ <arc id="ra148" source="p6" target="t47" />
+ <arc id="ra149" source="t47" target="p6" />
+<!-- read arc: -->
+ <arc id="ra150" source="p6" target="t51" />
+ <arc id="ra151" source="t51" target="p6" />
+<!-- read arc: -->
+ <arc id="ra152" source="p6" target="t43" />
+ <arc id="ra153" source="t43" target="p6" />
+<arc id="a154" source="t52" target="p7" />
+<arc id="a155" source="t53" target="p7" />
+<arc id="a156" source="t54" target="p7" />
+<arc id="a157" source="t55" target="p7" />
+<arc id="a158" source="t57" target="p8" />
+<arc id="a159" source="t58" target="p8" />
+<arc id="a160" source="t59" target="p8" />
+<arc id="a161" source="t56" target="p8" />
+<arc id="a162" source="t60" target="p9" />
+<arc id="a163" source="t61" target="p9" />
+<arc id="a164" source="t62" target="p9" />
+<arc id="a165" source="t63" target="p9" />
+<arc id="a166" source="t22" target="p10" />
+<arc id="a167" source="p10" target="t25" />
+<arc id="a168" source="p10" target="t26" />
+<arc id="a169" source="p10" target="t27" />
+<arc id="a170" source="p10" target="t28" />
+<arc id="a171" source="t23" target="p11" />
+<arc id="a172" source="p11" target="t29" />
+<arc id="a173" source="p11" target="t30" />
+<arc id="a174" source="p11" target="t31" />
+<arc id="a175" source="p11" target="t32" />
+<arc id="a176" source="t24" target="p12" />
+<arc id="a177" source="p12" target="t35" />
+<arc id="a178" source="p12" target="t36" />
+<arc id="a179" source="p12" target="t33" />
+<arc id="a180" source="p12" target="t34" />
+<arc id="a181" source="t25" target="p13" />
+<arc id="a182" source="t26" target="p13" />
+<arc id="a183" source="t27" target="p13" />
+<arc id="a184" source="t28" target="p13" />
+<arc id="a185" source="p13" target="t37" />
+<arc id="a186" source="t29" target="p14" />
+<arc id="a187" source="t30" target="p14" />
+<arc id="a188" source="t31" target="p14" />
+<arc id="a189" source="t32" target="p14" />
+<arc id="a190" source="p14" target="t38" />
+<arc id="a191" source="t35" target="p15" />
+<arc id="a192" source="t36" target="p15" />
+<arc id="a193" source="t33" target="p15" />
+<arc id="a194" source="t34" target="p15" />
+<arc id="a195" source="p15" target="t39" />
+<arc id="a196" source="t37" target="p16" />
+<arc id="a197" source="p16" target="t40" />
+<arc id="a198" source="p16" target="t41" />
+<arc id="a199" source="p16" target="t42" />
+<arc id="a200" source="p16" target="t43" />
+<arc id="a201" source="t38" target="p17" />
+<arc id="a202" source="p17" target="t46" />
+<arc id="a203" source="p17" target="t47" />
+<arc id="a204" source="p17" target="t44" />
+<arc id="a205" source="p17" target="t45" />
+<arc id="a206" source="t39" target="p18" />
+<arc id="a207" source="p18" target="t50" />
+<arc id="a208" source="p18" target="t51" />
+<arc id="a209" source="p18" target="t48" />
+<arc id="a210" source="p18" target="t49" />
+<arc id="a211" source="t41" target="p19" />
+<arc id="a212" source="p19" target="t52" />
+<arc id="a213" source="p19" target="t53" />
+<arc id="a214" source="p19" target="t54" />
+<arc id="a215" source="p19" target="t55" />
+<arc id="a216" source="t46" target="p20" />
+<arc id="a217" source="p20" target="t57" />
+<arc id="a218" source="p20" target="t58" />
+<arc id="a219" source="p20" target="t59" />
+<arc id="a220" source="p20" target="t56" />
+<arc id="a221" source="t51" target="p21" />
+<arc id="a222" source="p21" target="t60" />
+<arc id="a223" source="p21" target="t61" />
+<arc id="a224" source="p21" target="t62" />
+<arc id="a225" source="p21" target="t63" />
+
+</page>
+</net>
+</pnml>
