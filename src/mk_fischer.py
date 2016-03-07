@@ -26,8 +26,8 @@ def mk_fischer_iter (n, numproc, it, startp, endp, idp) :
 
     # At loc0: if id=0, then move to loc1
     for i in range (1, numproc + 1) :
-        dly = intervals.FloatInterval ([0, 1])
-        t = n.trans_add (nameit ('p%d_if_id=0' % i, it), dly)
+        #dly = intervals.FloatInterval ([0, 1])
+        t = n.trans_add (nameit ('p%d_if_id=0' % i, it))
         p = n.place_add (nameit ('p%d_l1' % i, it))
         loc[i, 1] = p
         t.pre_add (startp[i])
@@ -50,7 +50,7 @@ def mk_fischer_iter (n, numproc, it, startp, endp, idp) :
     for i in range (1, numproc + 1) :
         p = n.place_add (nameit ('p%d_l3' % i, it))
         loc[i, 3] = p
-        dly = intervals.FloatInterval ([10, 10])
+        dly = intervals.FloatInterval ([10, float ('inf')])
         t = n.trans_add (nameit ('p%d_pause' % i, it), dly)
         t.pre_add (loc[i,2])
         t.post_add (p)

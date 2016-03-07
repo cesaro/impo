@@ -1,0 +1,45 @@
+
+net latch
+
+# environment
+tr env_1       [0,0]        env1 d_0 -> env2 d_1
+tr env_2       [1000,1000]  env2 ck_0 -> env3 env4 ck_1
+tr env_3       [350,350]    env3 d_1 -> d_0
+tr env_4       [1000,1000]  env4 ck_1 -> ck_0
+
+tr not1_up     [219,219]    ck_0 not1_0 -> ck_0 not1_1
+tr not1_down   [147,147]    ck_1 not1_1 -> ck_1 not1_0
+
+tr not2_up     [155,155]    not1_0 not2_0 -> not1_0 not2_1
+tr not2_down   [163,163]    not1_1 not2_1 -> not1_1 not2_0
+
+tr xor_down0   [416,416]    ck_0 not2_0 xor_1 -> ck_0 not2_0 xor_0
+tr xor_down1   [416,416]    ck_1 not2_1 xor_1 -> ck_1 not2_1 xor_0
+tr xor_up01    [147,147]    ck_0 not2_1 xor_0 -> ck_0 not2_1 xor_1
+tr xor_up10    [147,147]    ck_1 not2_0 xor_0 -> ck_1 not2_0 xor_1
+
+tr and_up      [80,80]      ck_1 xor_1 and_0 -> ck_1 xor_1 and_1
+tr and_downxor [155,155]    xor_0 and_1 -> xor_0 and_0
+tr and_downck  [155,155]    ck_0 and_1 -> ck_0 and_0
+
+tr latch_up    [240,240]    d_1 q_0 -> d_1 q_1
+tr latch_down  [240,240]    d_0 q_1 -> d_0 q_0
+# transition "latch_down" never fires in under the given environment
+
+pl env1 (1)
+
+pl d_0 (1)
+pl d_1 (0)
+pl ck_0 (1)
+pl ck_1 (0)
+pl not1_0 (0)
+pl not1_1 (1)
+pl not2_0 (1)
+pl not2_1 (0)
+pl and_0 (1)
+pl and_1 (0)
+pl xor_0 (1)
+pl xor_1 (0)
+pl q_0 (1)
+pl q_1 (0)
+

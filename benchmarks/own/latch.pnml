@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pnml xmlns="http://www.pnml.org/version-2009/grammar/pnml">
+ <net id="n-F00-AF213-0" type ="http://www.laas.fr/tina/tpn">
+  <name>
+   <text>latch</text>
+  </name>
+ <page id="g-F00-AF275-1">
+  <place id="p-F00-AF2CF-2">
+  <name>
+   <text>and_0</text>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+  </place>
+  <place id="p-F00-AF32B-3">
+  <name>
+   <text>and_1</text>
+  </name>
+  </place>
+  <transition id="t-F00-AF333-4">
+  <name>
+   <text>and_downck</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>155</cn>
+     <cn>155</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-F00-AF353-5">
+  <name>
+   <text>and_downxor</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>155</cn>
+     <cn>155</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-F00-AF35C-6">
+  <name>
+   <text>and_up</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>80</cn>
+     <cn>80</cn>
+    </interval>
+   </delay>
+  </transition>
+  <place id="p-F00-AF364-7">
+  <name>
+   <text>ck_0</text>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+  </place>
+  <place id="p-F00-AF36B-8">
+  <name>
+   <text>ck_1</text>
+  </name>
+  </place>
+  <place id="p-F00-AF387-9">
+  <name>
+   <text>d_0</text>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+  </place>
+  <place id="p-F00-AF38F-10">
+  <name>
+   <text>d_1</text>
+  </name>
+  </place>
+  <place id="p-F00-AF395-11">
+  <name>
+   <text>env1</text>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+  </place>
+  <place id="p-F00-AF39C-12">
+  <name>
+   <text>env2</text>
+  </name>
+  </place>
+  <place id="p-F00-AF3C0-13">
+  <name>
+   <text>env3</text>
+  </name>
+  </place>
+  <place id="p-F00-AF3C7-14">
+  <name>
+   <text>env4</text>
+  </name>
+  </place>
+  <transition id="t-F00-AF3CE-15">
+  <name>
+   <text>env_1</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>0</cn>
+     <cn>0</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-F00-AF3D5-16">
+  <name>
+   <text>env_2</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>1000</cn>
+     <cn>1000</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-F00-AF3DE-17">
+  <name>
+   <text>env_3</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>350</cn>
+     <cn>350</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-F00-AF3FB-18">
+  <name>
+   <text>env_4</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>1000</cn>
+     <cn>1000</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-F00-AF404-19">
+  <name>
+   <text>latch_down</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>240</cn>
+     <cn>240</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-F00-AF40C-20">
+  <name>
+   <text>latch_up</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>240</cn>
+     <cn>240</cn>
+    </interval>
+   </delay>
+  </transition>
+  <place id="p-F00-AF42A-21">
+  <name>
+   <text>not1_0</text>
+  </name>
+  </place>
+  <place id="p-F00-AF431-22">
+  <name>
+   <text>not1_1</text>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+  </place>
+  <transition id="t-F00-AF439-23">
+  <name>
+   <text>not1_down</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>147</cn>
+     <cn>147</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-F00-AF46F-24">
+  <name>
+   <text>not1_up</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>219</cn>
+     <cn>219</cn>
+    </interval>
+   </delay>
+  </transition>
+  <place id="p-F00-AF5C2-25">
+  <name>
+   <text>not2_0</text>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+  </place>
+  <place id="p-F00-AF5CC-26">
+  <name>
+   <text>not2_1</text>
+  </name>
+  </place>
+  <transition id="t-F00-AF5D3-27">
+  <name>
+   <text>not2_down</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>163</cn>
+     <cn>163</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-F00-AF636-28">
+  <name>
+   <text>not2_up</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>155</cn>
+     <cn>155</cn>
+    </interval>
+   </delay>
+  </transition>
+  <place id="p-F00-AF63F-29">
+  <name>
+   <text>q_0</text>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+  </place>
+  <place id="p-F00-AF647-30">
+  <name>
+   <text>q_1</text>
+  </name>
+  </place>
+  <place id="p-F00-AF64E-31">
+  <name>
+   <text>xor_0</text>
+  </name>
+   <initialMarking>
+    <text>1</text>
+   </initialMarking>
+  </place>
+  <place id="p-F00-AF66C-32">
+  <name>
+   <text>xor_1</text>
+  </name>
+  </place>
+  <transition id="t-F00-AF673-33">
+  <name>
+   <text>xor_down0</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>416</cn>
+     <cn>416</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-F00-AF67C-34">
+  <name>
+   <text>xor_down1</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>416</cn>
+     <cn>416</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-F00-AF69C-35">
+  <name>
+   <text>xor_up01</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>147</cn>
+     <cn>147</cn>
+    </interval>
+   </delay>
+  </transition>
+  <transition id="t-F00-AF6A5-36">
+  <name>
+   <text>xor_up10</text>
+  </name>
+   <delay>
+    <interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed">
+     <cn>147</cn>
+     <cn>147</cn>
+    </interval>
+   </delay>
+  </transition>
+  <arc id="e-F00-AF6E8-37" source="p-F00-AF364-7" target="t-F00-AF333-4">
+  </arc>
+  <arc id="e-F00-AFB1A-38" source="p-F00-AF66C-32" target="t-F00-AF35C-6">
+  </arc>
+  <arc id="e-F00-AFB2E-39" source="p-F00-AF2CF-2" target="t-F00-AF35C-6">
+  </arc>
+  <arc id="e-F00-AFB35-40" source="t-F00-AF35C-6" target="p-F00-AF36B-8">
+  </arc>
+  <arc id="e-F00-AFB3B-41" source="t-F00-AF35C-6" target="p-F00-AF66C-32">
+  </arc>
+  <arc id="e-F00-AFB41-42" source="t-F00-AF35C-6" target="p-F00-AF32B-3">
+  </arc>
+  <arc id="e-F00-AFB47-43" source="p-F00-AF395-11" target="t-F00-AF3CE-15">
+  </arc>
+  <arc id="e-F00-AFB63-44" source="p-F00-AF387-9" target="t-F00-AF3CE-15">
+  </arc>
+  <arc id="e-F00-AFB69-45" source="t-F00-AF3CE-15" target="p-F00-AF39C-12">
+  </arc>
+  <arc id="e-F00-AFB6F-46" source="t-F00-AF3CE-15" target="p-F00-AF38F-10">
+  </arc>
+  <arc id="e-F00-AFB75-47" source="p-F00-AF39C-12" target="t-F00-AF3D5-16">
+  </arc>
+  <arc id="e-F00-AFB7B-48" source="p-F00-AF32B-3" target="t-F00-AF333-4">
+  </arc>
+  <arc id="e-F00-AFB81-49" source="p-F00-AF364-7" target="t-F00-AF3D5-16">
+  </arc>
+  <arc id="e-F00-AFB87-50" source="t-F00-AF3D5-16" target="p-F00-AF3C0-13">
+  </arc>
+  <arc id="e-F00-AFB8D-51" source="t-F00-AF3D5-16" target="p-F00-AF3C7-14">
+  </arc>
+  <arc id="e-F00-AFB93-52" source="t-F00-AF3D5-16" target="p-F00-AF36B-8">
+  </arc>
+  <arc id="e-F00-AFB99-53" source="p-F00-AF3C0-13" target="t-F00-AF3DE-17">
+  </arc>
+  <arc id="e-F00-AFB9F-54" source="p-F00-AF38F-10" target="t-F00-AF3DE-17">
+  </arc>
+  <arc id="e-F00-AFBA5-55" source="t-F00-AF3DE-17" target="p-F00-AF387-9">
+  </arc>
+  <arc id="e-F00-AFBBF-56" source="p-F00-AF3C7-14" target="t-F00-AF3FB-18">
+  </arc>
+  <arc id="e-F00-AFBC6-57" source="p-F00-AF36B-8" target="t-F00-AF3FB-18">
+  </arc>
+  <arc id="e-F00-AFBCC-58" source="t-F00-AF3FB-18" target="p-F00-AF364-7">
+  </arc>
+  <arc id="e-F00-AFBD2-59" source="t-F00-AF333-4" target="p-F00-AF364-7">
+  </arc>
+  <arc id="e-F00-AFD12-60" source="p-F00-AF387-9" target="t-F00-AF404-19">
+  </arc>
+  <arc id="e-F00-AFD22-61" source="p-F00-AF647-30" target="t-F00-AF404-19">
+  </arc>
+  <arc id="e-F00-AFD28-62" source="t-F00-AF404-19" target="p-F00-AF387-9">
+  </arc>
+  <arc id="e-F00-AFD2E-63" source="t-F00-AF404-19" target="p-F00-AF63F-29">
+  </arc>
+  <arc id="e-F00-AFD34-64" source="p-F00-AF38F-10" target="t-F00-AF40C-20">
+  </arc>
+  <arc id="e-F00-AFD3A-65" source="p-F00-AF63F-29" target="t-F00-AF40C-20">
+  </arc>
+  <arc id="e-F00-AFD40-66" source="t-F00-AF40C-20" target="p-F00-AF38F-10">
+  </arc>
+  <arc id="e-F00-AFD46-67" source="t-F00-AF40C-20" target="p-F00-AF647-30">
+  </arc>
+  <arc id="e-F00-AFD63-68" source="p-F00-AF36B-8" target="t-F00-AF439-23">
+  </arc>
+  <arc id="e-F00-AFD69-69" source="p-F00-AF431-22" target="t-F00-AF439-23">
+  </arc>
+  <arc id="e-F00-AFD6F-70" source="t-F00-AF333-4" target="p-F00-AF2CF-2">
+  </arc>
+  <arc id="e-F00-AFD76-71" source="t-F00-AF439-23" target="p-F00-AF36B-8">
+  </arc>
+  <arc id="e-F00-AFD7C-72" source="t-F00-AF439-23" target="p-F00-AF42A-21">
+  </arc>
+  <arc id="e-F00-AFD82-73" source="p-F00-AF364-7" target="t-F00-AF46F-24">
+  </arc>
+  <arc id="e-F00-AFD88-74" source="p-F00-AF42A-21" target="t-F00-AF46F-24">
+  </arc>
+  <arc id="e-F00-AFD8E-75" source="t-F00-AF46F-24" target="p-F00-AF364-7">
+  </arc>
+  <arc id="e-F00-AFD94-76" source="t-F00-AF46F-24" target="p-F00-AF431-22">
+  </arc>
+  <arc id="e-F00-AFD9A-77" source="p-F00-AF431-22" target="t-F00-AF5D3-27">
+  </arc>
+  <arc id="e-F00-AFDA0-78" source="p-F00-AF5CC-26" target="t-F00-AF5D3-27">
+  </arc>
+  <arc id="e-F00-AFDA6-79" source="t-F00-AF5D3-27" target="p-F00-AF431-22">
+  </arc>
+  <arc id="e-F00-AFDC1-80" source="t-F00-AF5D3-27" target="p-F00-AF5C2-25">
+  </arc>
+  <arc id="e-F00-AFDC7-81" source="p-F00-AF64E-31" target="t-F00-AF353-5">
+  </arc>
+  <arc id="e-F00-AFDCD-82" source="p-F00-AF42A-21" target="t-F00-AF636-28">
+  </arc>
+  <arc id="e-F00-AFDD4-83" source="p-F00-AF5C2-25" target="t-F00-AF636-28">
+  </arc>
+  <arc id="e-F00-AFDD9-84" source="t-F00-AF636-28" target="p-F00-AF42A-21">
+  </arc>
+  <arc id="e-F00-AFDDF-85" source="t-F00-AF636-28" target="p-F00-AF5CC-26">
+  </arc>
+  <arc id="e-F00-AFDE5-86" source="p-F00-AF364-7" target="t-F00-AF673-33">
+  </arc>
+  <arc id="e-F00-AFDEB-87" source="p-F00-AF5C2-25" target="t-F00-AF673-33">
+  </arc>
+  <arc id="e-F00-AFDF1-88" source="p-F00-AF66C-32" target="t-F00-AF673-33">
+  </arc>
+  <arc id="e-F00-AFDF8-89" source="t-F00-AF673-33" target="p-F00-AF364-7">
+  </arc>
+  <arc id="e-F00-AFDFD-90" source="t-F00-AF673-33" target="p-F00-AF5C2-25">
+  </arc>
+  <arc id="e-F00-AFE03-91" source="t-F00-AF673-33" target="p-F00-AF64E-31">
+  </arc>
+  <arc id="e-F00-AFE27-92" source="p-F00-AF32B-3" target="t-F00-AF353-5">
+  </arc>
+  <arc id="e-F00-AFE2D-93" source="p-F00-AF36B-8" target="t-F00-AF67C-34">
+  </arc>
+  <arc id="e-F00-AFE33-94" source="p-F00-AF5CC-26" target="t-F00-AF67C-34">
+  </arc>
+  <arc id="e-F00-AFE3A-95" source="p-F00-AF66C-32" target="t-F00-AF67C-34">
+  </arc>
+  <arc id="e-F00-AFE40-96" source="t-F00-AF67C-34" target="p-F00-AF36B-8">
+  </arc>
+  <arc id="e-F00-AFE46-97" source="t-F00-AF67C-34" target="p-F00-AF5CC-26">
+  </arc>
+  <arc id="e-F00-AFE4C-98" source="t-F00-AF67C-34" target="p-F00-AF64E-31">
+  </arc>
+  <arc id="e-F00-AFE52-99" source="p-F00-AF364-7" target="t-F00-AF69C-35">
+  </arc>
+  <arc id="e-F00-AFE58-100" source="p-F00-AF5CC-26" target="t-F00-AF69C-35">
+  </arc>
+  <arc id="e-F00-AFE5E-101" source="p-F00-AF64E-31" target="t-F00-AF69C-35">
+  </arc>
+  <arc id="e-F00-AFE64-102" source="t-F00-AF69C-35" target="p-F00-AF364-7">
+  </arc>
+  <arc id="e-F00-AFE6A-103" source="t-F00-AF353-5" target="p-F00-AF64E-31">
+  </arc>
+  <arc id="e-F00-AFE70-104" source="t-F00-AF69C-35" target="p-F00-AF5CC-26">
+  </arc>
+  <arc id="e-F00-AFE8B-105" source="t-F00-AF69C-35" target="p-F00-AF66C-32">
+  </arc>
+  <arc id="e-F00-AFE91-106" source="p-F00-AF36B-8" target="t-F00-AF6A5-36">
+  </arc>
+  <arc id="e-F00-AFE97-107" source="p-F00-AF5C2-25" target="t-F00-AF6A5-36">
+  </arc>
+  <arc id="e-F00-AFFC5-108" source="p-F00-AF64E-31" target="t-F00-AF6A5-36">
+  </arc>
+  <arc id="e-F00-AFFCD-109" source="t-F00-AF6A5-36" target="p-F00-AF36B-8">
+  </arc>
+  <arc id="e-F00-AFFDB-110" source="t-F00-AF6A5-36" target="p-F00-AF5C2-25">
+  </arc>
+  <arc id="e-F00-AFFE2-111" source="t-F00-AF6A5-36" target="p-F00-AF66C-32">
+  </arc>
+  <arc id="e-F00-AFFE8-112" source="t-F00-AF353-5" target="p-F00-AF2CF-2">
+  </arc>
+  <arc id="e-F00-AFFEE-113" source="p-F00-AF36B-8" target="t-F00-AF35C-6">
+  </arc>
+ </page>
+ </net>
+</pnml>

@@ -69,15 +69,9 @@
 <!-- transitions -->
 <transition id="t15">
 <name><text>p1_if_id=0</text></name>
-<delay>
-<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>1.0</cn></interval>
-</delay>
 </transition>
 <transition id="t16">
 <name><text>p2_if_id=0</text></name>
-<delay>
-<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>0.0</cn><cn>1.0</cn></interval>
-</delay>
 </transition>
 <transition id="t17">
 <name><text>p1_setid0</text></name>
@@ -118,13 +112,13 @@
 <transition id="t23">
 <name><text>p1_pause</text></name>
 <delay>
-<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>10.0</cn><cn>10.0</cn></interval>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed-open"><cn>10.0</cn><ci>infty</ci></interval>
 </delay>
 </transition>
 <transition id="t24">
 <name><text>p2_pause</text></name>
 <delay>
-<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed"><cn>10.0</cn><cn>10.0</cn></interval>
+<interval xmlns="http://www.w3.org/1998/Math/MathML" closure="closed-open"><cn>10.0</cn><ci>infty</ci></interval>
 </delay>
 </transition>
 <transition id="t25">
@@ -207,60 +201,60 @@
 <arc id="a40" source="t28" target="p1" />
 <arc id="a41" source="t29" target="p1" />
 <arc id="a42" source="p1" target="t16" />
-<arc id="a43" source="t34" target="p2" />
-<arc id="a44" source="t31" target="p2" />
-<arc id="a45" source="t35" target="p2" />
-<arc id="a46" source="t32" target="p2" />
-<arc id="a47" source="t36" target="p2" />
-<arc id="a48" source="t33" target="p2" />
-<arc id="a49" source="p2" target="t31" />
-<arc id="a50" source="p2" target="t17" />
-<arc id="a51" source="p2" target="t34" />
-<arc id="a52" source="p2" target="t20" />
+<arc id="a43" source="t31" target="p2" />
+<arc id="a44" source="t35" target="p2" />
+<arc id="a45" source="t32" target="p2" />
+<arc id="a46" source="t36" target="p2" />
+<arc id="a47" source="t33" target="p2" />
+<arc id="a48" source="t34" target="p2" />
+<arc id="a49" source="p2" target="t20" />
+<arc id="a50" source="p2" target="t31" />
+<arc id="a51" source="p2" target="t17" />
+<arc id="a52" source="p2" target="t34" />
 <!-- read arc: -->
  <arc id="ra53" source="p2" target="t15" />
  <arc id="ra54" source="t15" target="p2" />
 <!-- read arc: -->
- <arc id="ra55" source="p2" target="t25" />
- <arc id="ra56" source="t25" target="p2" />
+ <arc id="ra55" source="p2" target="t16" />
+ <arc id="ra56" source="t16" target="p2" />
 <!-- read arc: -->
  <arc id="ra57" source="p2" target="t28" />
  <arc id="ra58" source="t28" target="p2" />
 <!-- read arc: -->
- <arc id="ra59" source="p2" target="t16" />
- <arc id="ra60" source="t16" target="p2" />
+ <arc id="ra59" source="p2" target="t25" />
+ <arc id="ra60" source="t25" target="p2" />
 <arc id="a61" source="t17" target="p3" />
 <arc id="a62" source="t18" target="p3" />
 <arc id="a63" source="t19" target="p3" />
-<arc id="a64" source="p3" target="t32" />
-<arc id="a65" source="p3" target="t18" />
-<arc id="a66" source="p3" target="t35" />
-<arc id="a67" source="p3" target="t21" />
+<arc id="a64" source="p3" target="t21" />
+<arc id="a65" source="p3" target="t32" />
+<arc id="a66" source="p3" target="t18" />
+<arc id="a67" source="p3" target="t35" />
 <!-- read arc: -->
- <arc id="ra68" source="p3" target="t26" />
- <arc id="ra69" source="t26" target="p3" />
+ <arc id="ra68" source="p3" target="t29" />
+ <arc id="ra69" source="t29" target="p3" />
 <!-- read arc: -->
- <arc id="ra70" source="p3" target="t29" />
- <arc id="ra71" source="t29" target="p3" />
+ <arc id="ra70" source="p3" target="t26" />
+ <arc id="ra71" source="t26" target="p3" />
 <arc id="a72" source="t20" target="p4" />
 <arc id="a73" source="t21" target="p4" />
 <arc id="a74" source="t22" target="p4" />
-<arc id="a75" source="p4" target="t33" />
-<arc id="a76" source="p4" target="t19" />
-<arc id="a77" source="p4" target="t36" />
-<arc id="a78" source="p4" target="t22" />
+<arc id="a75" source="p4" target="t36" />
+<arc id="a76" source="p4" target="t22" />
+<arc id="a77" source="p4" target="t33" />
+<arc id="a78" source="p4" target="t19" />
 <!-- read arc: -->
- <arc id="ra79" source="p4" target="t27" />
- <arc id="ra80" source="t27" target="p4" />
+ <arc id="ra79" source="p4" target="t30" />
+ <arc id="ra80" source="t30" target="p4" />
 <!-- read arc: -->
- <arc id="ra81" source="p4" target="t30" />
- <arc id="ra82" source="t30" target="p4" />
+ <arc id="ra81" source="p4" target="t27" />
+ <arc id="ra82" source="t27" target="p4" />
 <arc id="a83" source="t31" target="p5" />
 <arc id="a84" source="t32" target="p5" />
 <arc id="a85" source="t33" target="p5" />
-<arc id="a86" source="t34" target="p6" />
-<arc id="a87" source="t35" target="p6" />
-<arc id="a88" source="t36" target="p6" />
+<arc id="a86" source="t36" target="p6" />
+<arc id="a87" source="t34" target="p6" />
+<arc id="a88" source="t35" target="p6" />
 <arc id="a89" source="t15" target="p7" />
 <arc id="a90" source="p7" target="t17" />
 <arc id="a91" source="p7" target="t18" />
@@ -290,9 +284,9 @@
 <arc id="a115" source="p13" target="t32" />
 <arc id="a116" source="p13" target="t33" />
 <arc id="a117" source="t30" target="p14" />
-<arc id="a118" source="p14" target="t34" />
-<arc id="a119" source="p14" target="t35" />
-<arc id="a120" source="p14" target="t36" />
+<arc id="a118" source="p14" target="t36" />
+<arc id="a119" source="p14" target="t34" />
+<arc id="a120" source="p14" target="t35" />
 
 </page>
 </net>
