@@ -280,8 +280,11 @@ class Main :
         # add k0 to the final conjunction
 
         l = []
+        i = 0
         for c in mxconfs :
-            print 'impo: con > eq: ===== new configuration:'
+            i += 1
+            print 'impo: con > eq: ===== new configuration (%d of %d):' \
+                % (i, len (mxconfs))
             print 'impo: con > eq:   all', long_list (c.events)
             print 'impo: con > eq:   mx ', long_list (c.maximal ())
             print 'impo: con > eq:   cex', long_list (c.cex ())
@@ -304,6 +307,23 @@ class Main :
             print 'impo: con > eq: negating constraint'
             const3 = const2.negate ()
             l.append (const3)
+
+            #print 'impo: con > eq: checking whether v0 compatible'
+            #if const.does_include_v0_hide (self.v0const) :
+            #    print 'impo: con > eq: v0-compatible, skipping'
+            #    continue
+
+            #print 'impo: con > eq: existential quantification'
+            #const2 = const.hide ()
+
+            #print 'impo: con > eq: negating constraint'
+            #const3 = const2.negate ()
+            #l.append (const3)
+
+
+        print 'impo: con > eq: done, '\
+                '%d max configs, %d v0-compatible, %d non v0-compat' \
+                % (len (mxconfs), len (mxconfs) - len (l), len (l))
 
         # compute final conjunction, adding k0
         self.compute_final_constraint (l)
@@ -571,6 +591,17 @@ class ConfigConst :
             self.__tab[obj] = v
             self.hidevars.append (v)
             return v
+
+    def does_include_v0_hide (self, v0const) :
+        query = 'included %s in\n' % v0const
+        query = 'hide ('
+        query += ', '.join (str (v) for v in self.hidevars)
+        query += ') in ' + self.const
+
+        output = polyop (query, 'impo: con > eq:  ', unlink=self.unlink)
+        print 'impo: con > eq:   query:', repr (query)
+        print 'impo: con > eq:   result:', repr (output)
+        return output == 'yes'
 
     def does_include_v0 (self, v0const) :
         # polyop gives correct result only if we have no variables to hide (ask Etienne)
